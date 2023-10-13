@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Registro</title>
+</head>
+<body>
+    <h1>Registro de Ingreso/Salida</h1>
+    <form method="post" action="{% url 'registrar_ingreso_salida' %}">
+        {% csrf_token %}
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required><br>
+        <label for="hora_ingreso">Hora de Ingreso:</label>
+        <input type="time" id="hora_ingreso" name="hora_ingreso" required><br>
+        <label for="hora_salida">Hora de Salida:</label>
+        <input type="time" id="hora_salida" name="hora_salida" required><br>
+        <!-- <label for="es_feriado">¿Es un día feriado?</label>
+        <input type="checkbox" id="es_feriado" name="es_feriado"><br> -->
+        <button type="submit">Registrar</button>
+    </form>
+</body>
+</html>
