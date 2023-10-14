@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from psycopg2 import Database
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'gestion_empleados'
+    'empleados'
 ]
 
 MIDDLEWARE = [
@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'gestion_empleados.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ccteirbf',
         'USER': 'ccteirbf',
         'PASSWORD': '6Ot1hGYGaML_hG09DtWtc64k217Zql_X',

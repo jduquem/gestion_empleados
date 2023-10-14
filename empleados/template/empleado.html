@@ -1,22 +1,68 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Formulario de Registro</title>
-</head>
-<body>
-    <h1>Registro de Ingreso/Salida</h1>
-    <form method="post" action="{% url 'registrar_ingreso_salida' %}">
-        {% csrf_token %}
-        <label for="fecha">Fecha:</label>
-        <input type="date" id="fecha" name="fecha" required><br>
-        <label for="hora_ingreso">Hora de Ingreso:</label>
-        <input type="time" id="hora_ingreso" name="hora_ingreso" required><br>
-        <label for="hora_salida">Hora de Salida:</label>
-        <input type="time" id="hora_salida" name="hora_salida" required><br>
-        <!-- <label for="es_feriado">¿Es un día feriado?</label>
-        <input type="checkbox" id="es_feriado" name="es_feriado"><br> -->
-        <button type="submit">Registrar</button>
-    </form>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestion Empleados</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body class="bg-dark">
+    <div class="col-md-4 offset-md-4">
+       <form action="{% url 'crear_empleado' %}" method="POST" class="card card-body mb-2" >
+            {% csrf_token %}
+
+            <label for="identification">identification:</label>
+            <input type="text" name="identification"  class="form-control mb-2" autofocus />
+
+            <label for="Nombre">Nombre:</label>
+            <input type="text" name="Nombre"  class="form-control mb-2" autofocus />
+
+            <label for="Genero">Genero:</label>
+            <input type="text" name="Genero"  class="form-control mb-2" autofocus />
+
+            <label for="Correo">Correo:</label>
+            <input type="text" name="Correo"  class="form-control mb-2" autofocus />
+
+            <label for="Numero telefonico">Numero telefonico:</label>
+            <input type="text" name="Numero_telefonico"  class="form-control mb-2" autofocus />
+
+            <label for="Salario">Salario:</label>
+            <input type="text" name="Salario"  class="form-control mb-2" autofocus />
+
+            <label for="Ciudad de recidencia">Ciudad de recidencia:</label>
+            <input type="text" name="Ciudad_de_recidencia"  class="form-control mb-2" autofocus />
+
+            <button class="btn btn-primary">Guardar</button>
+      </form>
+
+  
+      {% for empleado in empleados %}
+      <div class="list-group">
+        <div class="card card-body bg-secondary text-light d-flex flex-row justify-content-between mb-2">
+          <div>
+            <h3 class="h6">{{empleados.identification}}</h3>
+            <h3 class="h6">{{empleados.Nombre}}</h3>
+            <h3 class="h6">{{empleados.Genero}}</h3>
+            <h3 class="h6">{{empleados.Correo}}</h3>
+            <h3 class="h6">{{empleados.Numero_telefonico}}</h3>
+            <h3 class="h6">{{empleados.Salario}}</h3>
+            <h3 class="h6">{{empleados.Ciudad_de_recidencia}}</h3>
+          </div>
+
+        </div>
+      </div>
+      {% empty %}
+      <h1 class="text-light"> No hay empleados</h1>
+      {% endfor %}
+    </div>
+  </body>
 </html>
