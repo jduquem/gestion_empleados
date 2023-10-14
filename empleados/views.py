@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
-from .models import Employee, Employee_Shift
+from .models import Employee, EmployeeShift
 
 def listar_empleado(request):
     empleados = Employee.objects.all()
     return render(request, 'empleado.html', {'empleados': empleados})
 
 def listar_horarios(request):
-    horarios = Employee_Shift.objects.all()
+    horarios = EmployeeShift.objects.all()
     return render(request, 'horario.html', {'horarios': horarios})
 
 # def crear_empleado(request):
