@@ -1,47 +1,47 @@
-{% load static %}
+{% extends "./base.html" %}
+{% block title %} Gestión de empleados{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestion Empleados</title>
-    <link rel="stylesheet" href="{% static 'main.css' %}" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
-      crossorigin="anonymous"
-    />
-  </head>
-  <body class="bg-dark">
-    <div class="col-md-4 offset-md-4">
-      {% for empleado in empleados %}
-      <div class="list-group">
-        <div class="card card-body bg-secondary text-light d-flex flex-row justify-content-between mb-2">
-          <div>
-            <label for="">Cedula empleado</label>
-            <h3 class="h6">{{empleado.identification}}</h3>
-            <label for="">nombre empleado</label>
-            <h3 class="h6">{{empleado.name}}</h3>
-            <label for="">genero </label>
-            <h3 class="h6">{{empleado.gender}}</h3>
-            <label for="">correo </label>
-            <h3 class="h6">{{empleado.email}}</h3>
-            <label for="">Numero celular</label>
-            <h3 class="h6">{{empleado.numberphone}}</h3>
-            <label for="">salario</label>
-            <h3 class="h6">$ {{empleado.salary}}</h3>
-            <label for="">Ciudad</label>
-            <h3 class="h6">{{empleado.city}}</h3>
-          </div>
-
+{% block body %}
+<div class="row offset-md-1">
+  {{empleados}}
+    <div class="">
+        <h1>Listado de empleados</h1>
+        {% if empleados %}
+        <div class="table-responsive py-4">
+            <table class="table table-striped table-hover rwd_auto ">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>identification</th>
+                        <th>Nombre</th>
+                        <th>Genero</th>
+                        <th>Correo</th>
+                        <th>Numero Celular</th>
+                        <th>Salario</th>
+                        <th>Ciudad</th>
+                        <th colspan="">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for empleado in empleados %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ empleado.identification }}</td>
+                        <td>{{ empleado.name }}</td>
+                        <td>{{ empleado.gender }}</td>
+                        <td>{{ empleado.email }}</td>
+                        <td>{{ empleado.numberphone }}</td>
+                        <td>$ {{ empleado.salary }}</td>
+                        <td>{{ empleado.city }}</td>
+                        <td><a href="#" class="btn btn-info">Editar</a></td>
+                        <td><a href="# " class="btn btn-danger">Eliminar</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-      </div>
-      {% empty %}
-      <h1 class="text-light"> No hay empleados</h1>
-      {% endfor %}
+        {%endif%}
+        <a href="#" class="btn btn-info">Crear</a> 
     </div>
-  </body>
-</html>
+</div>
+{% endblock %}

@@ -1,55 +1,47 @@
-{% load static %}
+{% extends "./base.html" %}
+{% block title %} Gestión de horario{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestion horarios</title>
-    <link rel="stylesheet" href="{% static 'main.css' %}" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
-      crossorigin="anonymous"
-    />
-  </head>
-  <body class="bg-dark">
-    <div class="col-md-4 offset-md-4">
-      {% for horario in horarios %}
-      <div class="list-group">
-        <div class="card card-body bg-secondary text-light d-flex flex-row justify-content-between mb-2">
-          <div>
-            <label for="">Cedula empleado</label>
-            <h3 class="h6">{{horario.employee}}</h3>
-            <label for="">Fecha de registro</label>
-            <h3 class="h6">{{horario.date_reg}}</h3>
-            <label for="">hora de entrada</label>
-            <h3 class="h6">{{horario.entry_time}}</h3>
-            <label for="">hora de salida</label>
-            <h3 class="h6">{{horario.deperture_time}}</h3>
-            <label for="">es festivo?</label>
-            {%if horario.holiday == False %} 
-              <h3 class="h6">No</h3>
-            {%else%}
-              <h3 class="h6">Si</h3>
-            {%endif%}
-            <label for="">Total horas</label>
-            <h3 class="h6">{{horario.totalHours}}</h3>
-            <!-- <h3 class="h6">{{horario.Nombre}}</h3>
-            <h3 class="h6">{{horario.Genero}}</h3>
-            <h3 class="h6">{{horario.Correo}}</h3>
-            <h3 class="h6">{{horario.Numero_telefonico}}</h3>
-            <h3 class="h6">{{horario.Salario}}</h3>
-            <h3 class="h6">{{horario.Ciudad_de_recidencia}}</h3> -->
-          </div>
-
+{% block body %}
+{{horarios}}
+<div class="row offset-md-1">
+    <div class="">
+        <h1>Listado de horarios</h1>
+        {% if horarios %}
+        <div class="table-responsive py-4">
+            <table class="table table-striped table-hover rwd_auto ">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Cedula empleado</th>
+                        <th>Fecha de registro</th>
+                        <th>Hora de entrada</th>
+                        <th>Hora de salida</th>
+                        <th>Es festivo?</th>
+                        <th>Total horas</th>
+                        <th colspan="">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for horario in horarios %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ horarios.employee }}</td>
+                        <td>{{ horarios.date_reg|date:'d/m/Y' }}</td>
+                        <td>{{ horarios.entry_time|date:'hh:mm:ss' }}</td>
+                        <td>{{ horarios.deperture_time|date:'hh:mm:ss' }}</td>
+                        <td>{%if horarios.holiday == False %} No
+                          {%elif horarios.holiday == True %} Si
+                          {%endif%}</td>
+                        <td>{{ horarios.totalHours }}</td>
+                        <td><a href="#" class="btn btn-info">Editar</a></td>
+                        <td><a href="# " class="btn btn-danger">Eliminar</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-      </div>
-      {% empty %}
-      <h1 class="text-light"> No hay horarios</h1>
-      {% endfor %}
+        {%endif%}
+        <a href="#" class="btn btn-info">Crear</a> 
     </div>
-  </body>
-</html>
+</div>
+{% endblock %}
