@@ -22,7 +22,7 @@ class Employee(models.Model):
     def __str__(self):
         return self.identification
 
-class Employee_Hours(models.Model):
+class Employee_Shift(models.Model):
     identificationEmployee = models.ForeignKey(Employee, verbose_name="identificacion del empleado", blank=True, null=True, on_delete=models.CASCADE)
     date_reg = models.DateField(verbose_name = 'Fecha de registro', null = False, blank = False)
     entry_time = models.DateTimeField(verbose_name = 'Hora entrada', null = False, blank = False)
