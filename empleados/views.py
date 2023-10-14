@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from .models import employee
+from .models import Employee
 
 def list_empleado(request):
-    empleados = employee.objects.all()
+    empleados = Employee.objects.all()
     return render(request, 'empleado.html', {'empleados': empleados})
 
 def crear_empleado(request):
@@ -12,7 +12,7 @@ def crear_empleado(request):
     Numero_telefonico = request.POST['Numero_telefonico']
     Salario = request.POST['Salario']
     Ciudad_de_recidencia = request.POST['Ciudad_de_recidencia']
-    empleado = employee(identification=identification, Nombre=Nombre, Correo=Correo, 
+    empleado = Employee(identification=identification, Nombre=Nombre, Correo=Correo, 
                         Numero_telefonico = Numero_telefonico, Salario = Salario, 
                         Ciudad_de_recidencia = Ciudad_de_recidencia )
     empleado.save()
