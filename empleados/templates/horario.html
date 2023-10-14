@@ -2,7 +2,7 @@
 {% block title %} Gestión de horario{% endblock %}
 
 {% block body %}
-{{horarios}}
+
 <div class="row offset-md-1">
     <div class="">
         <h1>Listado de horarios</h1>
@@ -12,7 +12,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Cedula empleado</th>
+                        <th>Nombre empleado</th>
                         <th>Fecha de registro</th>
                         <th>Hora de entrada</th>
                         <th>Hora de salida</th>
@@ -22,22 +22,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for horario in horarios %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ horarios.employee }}</td>
-                        <td>{{ horarios.date_reg|date:'d/m/Y' }}</td>
-                        <td>{{ horarios.entry_time|date:'hh:mm:ss' }}</td>
-                        <td>{{ horarios.deperture_time|date:'hh:mm:ss' }}</td>
-                        <td>{%if horarios.holiday == False %} No
-                          {%elif horarios.holiday == True %} Si
-                          {%endif%}</td>
-                        <td>{{ horarios.totalHours }}</td>
-                        <td><a href="#" class="btn btn-info">Editar</a></td>
-                        <td><a href="# " class="btn btn-danger">Eliminar</a></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+                  {% for horario in horarios %}
+                  <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ horario.employee.name }}</td>
+                      <td>{{ horario.date_reg|date:'d/m/Y' }}</td>
+                      <td>{{ horario.entry_time }}</td>
+                      <td>{{ horario.departure_time }}</td>
+                      <td>{%if horario.holiday == False %} No
+                        {%elif horario.holiday == True %} Si
+                        {%endif%}</td>
+                      <td>{{ horario.total_hours }}</td>
+                      <td><a href="#" class="btn btn-info">Editar</a></td>
+                      <td><a href="# " class="btn btn-danger">Eliminar</a></td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
             </table>
         </div>
         {%endif%}

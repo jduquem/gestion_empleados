@@ -1,13 +1,40 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from .models import Employee, EmployeeShift
+from django.contrib import messages
+from django.urls import reverse
+
 
 def listar_empleado(request):
     empleados = Employee.objects.all()
     return render(request, 'empleado.html', {'empleados': empleados})
 
+def empleado_agregar(request):
+    queryset = Employee.objects.all()
+    for e in queryset:
+        if e == request.POST['identification']:
+            messages.warning(request, 'El empleado con cedula {} ya se encuentra creado'.format(request.POST['identification']))
+            return render(request, 'empleado.html')
+        else:
+            try:
+                identification=request.POST['identification'].upper()
+                name=request.POST['name']
+                gender=request.POST['gender']
+                email=request.POST['email']
+                numberphone=request.POST['numberphone']
+                salary=request.POST['salary']
+                city=request.POST['city']
+                Employee.objects.create(identification = identification, name=name, gender=gender, numberphone=numberphone, email=email, salary=salary, city=city)
+                messages.success(request, 'Se ha creado el empleado con identification {}'.format(identification))
+                return HttpResponseRedirect(reverse('empleado'))
+            except:
+                return render(request, 'empleado.html')
+    return render(request, 'empleado.html')
+
 def listar_horarios(request):
     horarios = EmployeeShift.objects.all()
     return render(request, 'horario.html', {'horarios': horarios})
+
+
 
 # def crear_empleado(request):
 #     identification = request.POST['identification']
