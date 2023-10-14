@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestion Empleados</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body class="bg-dark">
+    <div class="col-md-4 offset-md-4">
+      {% for empleado in empleados %}
+      <div class="list-group">
+        <div class="card card-body bg-secondary text-light d-flex flex-row justify-content-between mb-2">
+          <div>
+            <label for="">Cedula empleado</label>
+            <h3 class="h6">{{empleado.identification}}</h3>
+            <label for="">nombre empleado</label>
+            <h3 class="h6">{{empleado.name}}</h3>
+            <label for="">genero </label>
+            <h3 class="h6">{{empleado.gender}}</h3>
+            <label for="">correo </label>
+            <h3 class="h6">{{empleado.email}}</h3>
+            <label for="">Numero celular</label>
+            <h3 class="h6">{{empleado.numberphone}}</h3>
+            <label for="">salario</label>
+            <h3 class="h6">$ {{empleado.salary}}</h3>
+            <label for="">Ciudad</label>
+            <h3 class="h6">{{empleado.city}}</h3>
+          </div>
+
+        </div>
+      </div>
+      {% empty %}
+      <h1 class="text-light"> No hay empleados</h1>
+      {% endfor %}
+    </div>
+  </body>
+</html>

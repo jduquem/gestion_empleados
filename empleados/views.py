@@ -1,22 +1,26 @@
 from django.shortcuts import render, redirect
-from .models import Employee
+from .models import Employee, Employee_Shift
 
-def list_empleado(request):
+def listar_empleado(request):
     empleados = Employee.objects.all()
     return render(request, 'empleado.html', {'empleados': empleados})
 
-def crear_empleado(request):
-    identification = request.POST['identification']
-    Nombre = request.POST['Nombre']
-    Correo = request.POST['Correo']
-    Numero_telefonico = request.POST['Numero_telefonico']
-    Salario = request.POST['Salario']
-    Ciudad_de_recidencia = request.POST['Ciudad_de_recidencia']
-    empleado = Employee(identification=identification, Nombre=Nombre, Correo=Correo, 
-                        Numero_telefonico = Numero_telefonico, Salario = Salario, 
-                        Ciudad_de_recidencia = Ciudad_de_recidencia )
-    empleado.save()
-    return redirect("empleado.html")
+def listar_horarios(request):
+    horarios = Employee_Shift.objects.all()
+    return render(request, 'horario.html', {'horarios': horarios})
+
+# def crear_empleado(request):
+#     identification = request.POST['identification']
+#     Nombre = request.POST['Nombre']
+#     Correo = request.POST['Correo']
+#     Numero_telefonico = request.POST['Numero_telefonico']
+#     Salario = request.POST['Salario']
+#     Ciudad_de_recidencia = request.POST['Ciudad_de_recidencia']
+#     empleado = Employee(identification=identification, Nombre=Nombre, Correo=Correo, 
+#                         Numero_telefonico = Numero_telefonico, Salario = Salario, 
+#                         Ciudad_de_recidencia = Ciudad_de_recidencia )
+#     empleado.save()
+#     return redirect("empleado.html")
 
 
 
