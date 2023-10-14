@@ -30,7 +30,11 @@
             <label for="">hora de salida</label>
             <h3 class="h6">{{horario.deperture_time}}</h3>
             <label for="">es festivo?</label>
-            <h3 class="h6">{{horario.holiday}}</h3>
+            {%if horario.holiday == False %} 
+              <h3 class="h6">No</h3>
+            {%else%}
+              <h3 class="h6">Si</h3>
+            {%endif%}
             <label for="">Total horas</label>
             <h3 class="h6">{{horario.totalHours}}</h3>
             <!-- <h3 class="h6">{{horario.Nombre}}</h3>

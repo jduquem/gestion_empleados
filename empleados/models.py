@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
+from django.urls import reverse
 
 
 # admin_group = Group.objects.create(name='Administrador')
@@ -33,3 +34,8 @@ class Employee_Shift(models.Model):
 
     def __str__(self):
         return self.employee
+    
+    def save(self, *args, **kwargs):
+        self.total_hours=200
+        super(Employee_Shift, self).save(*args, **kwargs)
+        
