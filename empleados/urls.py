@@ -3,7 +3,7 @@ from . import views
 from .views import listar_empleado, empleado_agregar, empleados_actualizar, empleados_eliminar, listar_horarios, horario_agregar, horarios_actualizar, horarios_eliminar 
 
 urlpatterns = [
-        # empleados
+        # horarios
     path('listar_empleados/', listar_empleado.as_view(), name='listar_empleados'),
     path('empleado_agregar/', empleado_agregar.as_view(), name='empleado_agregar'),
     path('empleados_actualizar/', empleados_actualizar.as_view(), name='empleados_actualizar'),

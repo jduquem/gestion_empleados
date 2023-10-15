@@ -22,6 +22,7 @@ class empleado_agregar(View):
     template_name = 'empleado_agregar.html'
 
     def get(self, request, *args, **kwargs):
+        import pdb; pdb.set_trace()
         try:
             queryset = Employee.objects.all()
             return render(request, self.template_name, {'queryset':queryset})
@@ -29,26 +30,34 @@ class empleado_agregar(View):
             return render(request, self.template_name)    
     
     def post(self, request, *args, **kwargs):
-        queryset = Employee.objects.all()
-        for e in queryset:
-            if e == request.POST['identification']:
-                messages.warning(request, 'El empleado con cedula {} ya se encuentra creado'.format(request.POST['identification']))
-                return render(request, 'empleado_agregar.html')
-            else:
-                try:
-                    identification=request.POST['identification']
-                    name=request.POST['name']
-                    gender=request.POST['gender']
-                    email=request.POST['email']
-                    numberphone=request.POST['numberphone']
-                    salary=request.POST['salary']
-                    city=request.POST['city']
-                    Employee.objects.create(identification = identification, name=name, gender=gender, numberphone=numberphone, email=email, salary=salary, city=city)
-                    messages.success(request, 'Se ha creado el empleado con identification {}'.format(identification))
-                    return HttpResponseRedirect(reverse('empleado'))
-                except:
-                    return render(request, self.template_name,)
-        return render(request, self.template_name,)
+        import pdb; pdb.set_trace()
+        identification = request.POST.get('identification')
+        name = request.POST.get('name')
+        gender = request.POST.get('gender')
+        email = request.POST.get('email')
+        numberphone = request.POST.get('numberphone')
+        salary = request.POST.get('salary')
+        city = request.POST.get('city')
+
+        if Employee.objects.filter(identification=identification).exists():
+            messages.warning(request, 'El empleado con cédula {} ya se encuentra creado'.format(identification))
+            return render(request, self.template_name)
+
+        try:
+            new_employee = Employee.objects.create(
+                identification=identification,
+                name=name,
+                gender=gender,
+                numberphone=numberphone,
+                email=email,
+                salary=salary,
+                city=city
+            )
+            messages.success(request, 'Se ha creado el empleado con cédula {}'.format(new_employee.identification))
+            return HttpResponseRedirect(reverse('empleado'))
+        except Exception as e:
+            messages.error(request, 'Error al crear el empleado: {}'.format(str(e)))
+            return render(request, self.template_name)
 
 # Clase para modificar los empleados
 class empleados_actualizar(View):
