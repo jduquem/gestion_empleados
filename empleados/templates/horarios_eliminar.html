@@ -1,0 +1,30 @@
+{% extends "./base.html" %}
+
+{% block title %} Principal{% endblock %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <h2>Eliminar horario</h2>
+        <div class="card">
+            <div class="card-body">
+                <form action="{% url 'horarios_eliminar' %}" method="POST">{% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" id="employee" name="employee" value="{{empleado}}" class="form-control" placeholder="identification"
+                            minlength="6" maxlength="6" hidden>
+                    </div>
+                    <div class="alert alert-danger" role="alert">
+                        Esta seguro que desea eliminar el empleado {{employee}}
+                      </div>
+                    <div class="form-group">
+                        <button type="submit" type="button" class="btn btn-danger" >Aceptar</button>
+                        <a href="{% url 'horarios' %}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

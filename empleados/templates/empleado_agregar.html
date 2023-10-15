@@ -10,13 +10,18 @@
             <div class="card-body">
                 <form action="{% url 'empleado_agregar' %}" method="POST">{% csrf_token %}
                     <div class="form-group">
-                        <input type="text" id="identification"  name="identification" class="form-control" placeholder="identification" autocomplete="off" required>
+                        <input type="number" id="identification"  name="identification" class="form-control" placeholder="identification" autocomplete="off" required>
                     </div>
                     <div class="form-group">
                         <input type="text" id="name"  name="name" class="form-control" placeholder="Nombre Empleado" autocomplete="off" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" id="gender"  name="gender" class="form-control"  placeholder="Genero" autocomplete="off" required>
+                        <select name="numestado" id="numestado" class="form-control" required>
+                            <option value="">Seleccione una opción</option>
+                            <option value="F">Femenino</option>
+                            <option value="M">Masculino</option>
+                            <option value="O">Otro</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <input type="text" id="email"  name="email" class="form-control"  placeholder="Correo" autocomplete="off" required>
