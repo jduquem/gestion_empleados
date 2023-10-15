@@ -6,13 +6,15 @@ from django.views import View
 import datetime
 
 ### empleados ###
+
 # Clase para listar los empleados
-class listar_empleado(View):
+class listar_empleados(View):
     template_name = 'empleado.html'
 
     def get(self, request, *args, **kwargs):
         try:
             empleados = Employee.objects.all()
+            # import pdb; pdb.set_trace()
             return render(request, self.template_name, {'empleados':empleados})
         except:
             return render(request, self.template_name)
@@ -22,7 +24,6 @@ class empleado_agregar(View):
     template_name = 'empleado_agregar.html'
 
     def get(self, request, *args, **kwargs):
-        import pdb; pdb.set_trace()
         try:
             queryset = Employee.objects.all()
             return render(request, self.template_name, {'queryset':queryset})
@@ -30,7 +31,7 @@ class empleado_agregar(View):
             return render(request, self.template_name)    
     
     def post(self, request, *args, **kwargs):
-        import pdb; pdb.set_trace()
+        
         identification = request.POST.get('identification')
         name = request.POST.get('name')
         gender = request.POST.get('gender')
@@ -38,7 +39,7 @@ class empleado_agregar(View):
         numberphone = request.POST.get('numberphone')
         salary = request.POST.get('salary')
         city = request.POST.get('city')
-
+        # import pdb; pdb.set_trace()
         if Employee.objects.filter(identification=identification).exists():
             messages.warning(request, 'El empleado con cédula {} ya se encuentra creado'.format(identification))
             return render(request, self.template_name)
@@ -48,8 +49,8 @@ class empleado_agregar(View):
                 identification=identification,
                 name=name,
                 gender=gender,
-                numberphone=numberphone,
                 email=email,
+                numberphone=numberphone,
                 salary=salary,
                 city=city
             )
@@ -60,8 +61,8 @@ class empleado_agregar(View):
             return render(request, self.template_name)
 
 # Clase para modificar los empleados
-class empleados_actualizar(View):
-    template_name = 'empleados_actualizar.html'
+class empleado_actualizar(View):
+    template_name = 'empleado_actualizar.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -88,13 +89,13 @@ class empleados_actualizar(View):
             empleados.salary= salary
             empleados.city = city
             empleados.save()
-            return HttpResponseRedirect(reverse('empleado',))
+            return HttpResponseRedirect(reverse('empleado'))
         except:
             return render(request, self.template_name)
 
 # Clase para eliminar los empleados
-class empleados_eliminar(View):
-    template_name = 'empleados_eliminar.html'
+class empleado_eliminar(View):
+    template_name = 'empleado_eliminar.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -151,12 +152,12 @@ class horario_agregar(View):
                     messages.success(request, 'Se ha creado el horario para el empleado {}'.format(employee))
                     return HttpResponseRedirect(reverse('horario'))
                 except:
-                    return render(request, self.template_name,)
-        return render(request, self.template_name,)
+                    return render(request, self.template_name)
+        return render(request, self.template_name)
 
 # Clase para modificar los horarios
-class horarios_actualizar(View):
-    template_name = 'horarios_actualizar.html'
+class horario_actualizar(View):
+    template_name = 'horario_actualizar.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -183,13 +184,13 @@ class horarios_actualizar(View):
             empleados.departure_time= departure_time
             empleados.total_hours=total_hours
             empleados.save()
-            return HttpResponseRedirect(reverse('horario',))
+            return HttpResponseRedirect(reverse('horario'))
         except:
             return render(request, self.template_name)
 
 # Clase para eliminar los horarios
-class horarios_eliminar(View):
-    template_name = 'horarios_eliminar.html'
+class horario_eliminar(View):
+    template_name = 'horario_eliminar.html'
 
     def get(self, request, *args, **kwargs):
         try:

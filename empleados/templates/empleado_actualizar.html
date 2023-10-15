@@ -8,7 +8,7 @@
         <h2>Edición de empleados</h2>
         <div class="card">
             <div class="card-body">
-                <form action="{% url 'empleados_actualizar' %}" method="POST">{% csrf_token %}
+                <form action="{% url 'empleado_actualizar' %}" method="POST">{% csrf_token %}
                     <div class="form-group">
                         <input type="number" id="identification" name="identification" value="{{identification}}" class="form-control" readonly required>
                     </div>

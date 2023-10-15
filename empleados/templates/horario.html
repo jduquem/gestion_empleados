@@ -33,15 +33,15 @@
                         {%elif horario.holiday == True %} Si
                         {%endif%}</td>
                       <td>{{ horario.total_hours }}</td>
-                      <td><a href="% url 'horarios_actualizar' %" class="btn btn-info">Editar</a></td>
-                      <td><a href="% url 'horarios_eliminar' %" class="btn btn-danger">Eliminar</a></td>
+                      <td><a href="{% url 'horario_actualizar' %}" class="btn btn-info">Editar</a></td>
+                      <td><a href="{% url 'horario_eliminar' %}" class="btn btn-danger">Eliminar</a></td>
                   </tr>
                   {% endfor %}
               </tbody>
             </table>
         </div>
         {%endif%}
-        <a href="#" class="btn btn-info">Crear</a> 
+        <a href="{% url 'horario_agregar' %}" class="btn btn-info">Crear</a> 
     </div>
 </div>
 {% endblock %}

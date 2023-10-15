@@ -3,7 +3,7 @@
 
 {% block body %}
 <div class="row offset-md-1">
-  
+  {{empleados}}
     <div class="">
         <h1>Listado de empleados</h1>
         {% if empleados %}
@@ -33,15 +33,15 @@
                         <td>{{ empleado.numberphone }}</td>
                         <td>$ {{ empleado.salary }}</td>
                         <td>{{ empleado.city }}</td>
-                        <td><a href="% url 'empleados_actualizar' %" class="btn btn-info">Editar</a></td>
-                        <td><a href="% url 'empleados_eliminar' % " class="btn btn-danger">Eliminar</a></td>
+                        <td><a href="{% url 'empleado_actualizar' %}" class="btn btn-info">Editar</a></td>
+                        <td><a href="{% url 'empleado_eliminar' % }" class="btn btn-danger">Eliminar</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
         {%endif%}
-        <a href="% url 'empleado_agregar' %" class="btn btn-info">Crear</a> 
+        <a href="{% url 'empleado_agregar' %}" class="btn btn-info">Crear</a> 
     </div>
 </div>
 {% endblock %}
