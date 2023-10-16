@@ -1,11 +1,44 @@
-from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.shortcuts import render, redirect, HttpResponseRedirect, get_object_or_404
 from .models import Employee, EmployeeShift
 from django.contrib import messages
 from django.urls import reverse
 from django.views import View
-import datetime
+from datetime import datetime
 
 ### empleados ###
+
+# Clase para listar el detalle
+class listar_detalle(View):
+    template_name = 'detalle.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            horarios = EmployeeShift.objects.all()
+            return render(request, self.template_name, {'horarios':horarios})
+        except:
+            return render(request, self.template_name)
+        
+
+    # def get(self, request, *args, **kwargs):
+    #     try:
+    #         horarios = EmployeeShift.objects.all()
+    #         resultados = []
+
+    #         for horario in horarios:
+    #             hora_inicio = datetime.strptime(str(horario.entry_time), '%H:%M:%S').time()
+    #             hora_fin = datetime.strptime(str(horario.departure_time), '%H:%M:%S').time()
+
+    #             diferencia = datetime.combine(datetime.today(), hora_fin) - datetime.combine(datetime.today(), hora_inicio)
+
+    #             horas_en_rango = diferencia.total_seconds() / 3600
+
+    #             resultados.append({
+    #                 'horario': horario,
+    #                 'horas_en_rango': horas_en_rango,
+    #             })
+
+    #     except:
+    #         return render(request, self.template_name, {'horarios':horarios}, {'resultados': resultados})
 
 # Clase para listar los empleados
 class listar_empleados(View):
@@ -16,7 +49,8 @@ class listar_empleados(View):
             empleados = Employee.objects.all()
             # import pdb; pdb.set_trace()
             return render(request, self.template_name, {'empleados':empleados})
-        except:
+        except Exception as e:
+            print(f"Se ha producido un error: {e}")
             return render(request, self.template_name)
 
 # Clase para agregar los empleados
@@ -63,17 +97,19 @@ class empleado_agregar(View):
 # Clase para modificar los empleados
 class empleado_actualizar(View):
     template_name = 'empleado_actualizar.html'
-
-    def get(self, request, *args, **kwargs):
+    def get(self, request, employee_id):
         try:
-            queryset = Employee.objects.all()
-            return render(request, self.template_name, {'queryset':queryset})
-        except:
-            return render(request, self.template_name)
+            posturl = request.GET.dict()
+            print(posturl)
+            employee = get_object_or_404(Employee, employee_id=employee_id)
+            import pdb; pdb.set_trace()
+        except Employee.DoesNotExist:
+            return render(request, 'employee_not_found.html')
+        return render(request, self.template_name, {'employee': employee})
 
     def post(self, request, *args, **kwargs):
         try:
-            identification =request.POST['identification']
+            identification = request.POST['identification']
             name=request.POST['name']
             gender=request.POST['gender']
             email=request.POST['email']
@@ -81,7 +117,7 @@ class empleado_actualizar(View):
             salary=request.POST['salary']
             city=request.POST['city']
 
-            empleados = Employee.objects.get(identification=kwargs['identification'])
+            empleados = Employee.objects.get(identification =kwargs['identification'])
             empleados.name = name
             empleados.gender= gender
             empleados.email= email
@@ -127,7 +163,8 @@ class horario_agregar(View):
     def get(self, request, *args, **kwargs):
         try:
             queryset = EmployeeShift.objects.all()
-            return render(request, self.template_name, {'queryset':queryset})
+            queryset_2 = Employee.objects.all()
+            return render(request, self.template_name, {'queryset':queryset}, {'queryset_2':queryset_2})
         except:
             return render(request, self.template_name)    
     
@@ -139,19 +176,23 @@ class horario_agregar(View):
                 return render(request, 'horario_agregar.html')
             else:
                 try:
-                    employee=request.POST['employee']
+                    employee_id = int(request.POST['employee'])
                     date_reg=request.POST['date_reg']
                     entry_time=request.POST['entry_time']
                     departure_time=request.POST['departure_time']
-                    h_init = datetime.strptime(entry_time, "%H:%M:%S")
-                    h_end = datetime.strptime(departure_time, "%H:%M:%S")
-                    diferencia = h_end - h_init
-                    # holiday = festivos(date_reg)
-                    total_hours= diferencia.total_seconds() / 3600 
-                    EmployeeShift.objects.create(employee = employee, date_reg=date_reg, entry_time=entry_time, departure_time=departure_time, holiday=holiday, total_hours=total_hours)
-                    messages.success(request, 'Se ha creado el horario para el empleado {}'.format(employee))
+                    holiday = False
+                    total_hours = 6
+                    # import pdb; pdb.set_trace()
+                    # h_init = datetime.strptime(str(entry_time), '%H:%M').time()
+                    # h_end = datetime.strptime(str(entry_time), '%H:%M').time()
+                    # diferencia = h_end - h_init
+                    # # holiday = festivos(date_reg)
+                    # total_hours= diferencia.total_seconds() / 3600 
+                    EmployeeShift.objects.create(employee_id = employee_id, date_reg=date_reg, entry_time=entry_time, departure_time=departure_time, holiday=holiday, total_hours=total_hours)
+                    messages.success(request, 'Se ha creado el horario para el empleado')
                     return HttpResponseRedirect(reverse('horario'))
-                except:
+                except Exception as e:
+                    print(f"Se ha producido un error: {e}")
                     return render(request, self.template_name)
         return render(request, self.template_name)
 
@@ -249,3 +290,27 @@ class horario_eliminar(View):
 #     print(f"{fecha} es un domingo.")
 # else:
 #     print(f"{fecha} no es un domingo.")
+
+
+# views.py
+from django.views.generic import TemplateView
+from django.http import JsonResponse
+from .models import Employee
+from django.db.models import Avg
+
+class EmployeeSalaryChartView(TemplateView):
+    template_name = 'employee_salary_chart.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Calcula el salario promedio de tus empleados
+        average_salary = Employee.objects.aggregate(avg_salary=Avg('salary'))['avg_salary']
+        if average_salary is None:
+            average_salary = 0
+        context['average_salary'] = average_salary
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        # Retorna los datos del salario promedio en formato JSON
+        data = {'average_salary': context['average_salary']}
+        return JsonResponse(data)
