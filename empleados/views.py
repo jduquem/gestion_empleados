@@ -5,6 +5,16 @@ from django.urls import reverse
 from django.views import View
 from datetime import datetime
 
+
+### index
+
+class index(View):
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'index.html')
+
+
+
 ### empleados ###
 
 # Clase para listar el detalle
@@ -89,7 +99,7 @@ class empleado_agregar(View):
                 city=city
             )
             messages.success(request, 'Se ha creado el empleado con cédula {}'.format(new_employee.identification))
-            return HttpResponseRedirect(reverse('empleado'))
+            return HttpResponseRedirect(reverse('listar_empleados'))
         except Exception as e:
             messages.error(request, 'Error al crear el empleado: {}'.format(str(e)))
             return render(request, self.template_name)
@@ -162,9 +172,9 @@ class horario_agregar(View):
 
     def get(self, request, *args, **kwargs):
         try:
-            queryset = EmployeeShift.objects.all()
-            queryset_2 = Employee.objects.all()
-            return render(request, self.template_name, {'queryset':queryset}, {'queryset_2':queryset_2})
+            # queryset = EmployeeShift.objects.all()
+            employees = Employee.objects.all()
+            return render(request, self.template_name, {'employees':employees})
         except:
             return render(request, self.template_name)    
     
@@ -190,7 +200,7 @@ class horario_agregar(View):
                     # total_hours= diferencia.total_seconds() / 3600 
                     EmployeeShift.objects.create(employee_id = employee_id, date_reg=date_reg, entry_time=entry_time, departure_time=departure_time, holiday=holiday, total_hours=total_hours)
                     messages.success(request, 'Se ha creado el horario para el empleado')
-                    return HttpResponseRedirect(reverse('horario'))
+                    return HttpResponseRedirect(reverse('listar_horarios'))
                 except Exception as e:
                     print(f"Se ha producido un error: {e}")
                     return render(request, self.template_name)

@@ -1,9 +1,13 @@
 from django.urls import path
-from .views import listar_empleados, empleado_agregar, empleado_actualizar, empleado_eliminar, listar_horarios, horario_agregar, horario_actualizar, horario_eliminar, listar_detalle, EmployeeSalaryChartView
+from .views import listar_empleados, empleado_agregar, empleado_actualizar, empleado_eliminar, listar_horarios, horario_agregar, horario_actualizar, horario_eliminar, listar_detalle, EmployeeSalaryChartView, index
 
 urlpatterns = [
+   
+    path('', index.as_view(), name='index'),    
+   
+
+
         # empleado
-    path('listar_detalle/', listar_detalle.as_view(), name='listar_detalle'),    
     path('listar_empleados/', listar_empleados.as_view(), name='listar_empleados'),
     path('empleado_agregar/', empleado_agregar.as_view(), name='empleado_agregar'),
     path('empleado_actualizar/', empleado_actualizar.as_view(), name='empleado_actualizar'),
@@ -23,4 +27,5 @@ urlpatterns = [
 
       # reporte
     path('EmployeeSalaryChartView/', EmployeeSalaryChartView.as_view(), name='EmployeeSalaryChartView'),
+    path('listar_detalle/', listar_detalle.as_view(), name='listar_detalle'),
  ]

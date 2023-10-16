@@ -34,8 +34,4 @@ class EmployeeShift(models.Model):
 
     def _str_(self):
         return f"{self.employee} - {self.date_reg}"
-
-    def save(self, *args, **kwargs):
-        self.total_hours = 200 
-        super(EmployeeShift, self).save(*args, **kwargs)
         
