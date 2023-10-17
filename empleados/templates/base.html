@@ -17,12 +17,13 @@
                     <span class="navbar-toggler-icon"></span>
                     </button>
                 </div>
-                <td><a href="{% url 'listar_detalle'  %}" class="btn btn-info">listar detalle</a></td>
-                <td><a href="{% url 'listar_empleados'  %}" class="btn btn-info">listar empleados</a></td>
-                <td><a href="{% url 'listar_horarios'  %}" class="btn btn-info">listar horarios</a></td>
-                <td><a href="{% url 'EmployeeSalaryChartView'  %}" class="btn btn-info">Reporte</a></td>
+                <td><a href="{% url 'listar_empleados'  %}" class="btn btn-info">Empleados</a></td>
+                <td><a href="{% url 'listar_horarios'  %}" class="btn btn-info">Horarios</a></td>
+                <td><a href="{% url 'nominee_salary_details'  %}" class="btn btn-info">Nómina</a></td>
+                <td><a href="{% url 'nominee_salary_average'  %}" class="btn btn-info">Reporte</a></td>
             </nav>
             <div class="cotainer py-4">
+                {% load humanize %}
                 {%block body%}
 
                 {%endblock%}

@@ -1,17 +1,16 @@
-{% extends "./base.html" %}
+{% extends "../base.html" %}
 {% block title %} Gestión de horario{% endblock %}
 
 {% block body %}
 
 <div class="row offset-md-1">
     <div class="">
-        <h1>Detalle</h1>
+        <h1>Nómina</h1>
         {% if horarios %}
         <div class="table-responsive py-4">
             <table class="table table-striped table-hover rwd_auto ">
                 <thead>
                     <tr>
-                        <th>#</th>
                         <th>Cedula</th>
                         <th>Nombre empleado</th>
                         <th>Genero</th>
@@ -19,7 +18,7 @@
                         <th>Numero Telefonico</th>
                         <th>Salario</th>
                         <th>Ciudad</th>
-                        <th>Fecha de registro</th>
+                        <th>Fecha</th>
                         <th>Hora de entrada</th>
                         <th>Hora de salida</th>
                         <th>Festivo</th>
@@ -30,20 +29,19 @@
                 <tbody>
                   {% for horario in horarios %}
                   <tr>
-                      <td>{{ forloop.counter }}</td>
                       <td>{{ horario.employee.identification }}</td>
                       <td>{{ horario.employee.name }}</td>
                       <td>{{ horario.employee.gender }}</td>
                       <td>{{ horario.employee.email }}</td>
                       <td>{{ horario.employee.numberphone }}</td>
-                      <td>$ {{ horario.employee.salary}}</td>
+                      <td>$ {{ horario.employee.salary|floatformat:2}}</td>
                       <td>{{ horario.employee.city }}</td>
                       <td>{{ horario.date_reg|date:'d/m/Y' }}</td>
                       <td>{{ horario.entry_time }}</td>
                       <td>{{ horario.departure_time }}</td>
                       <td>{%if horario.holiday == False %} No {%elif horario.holiday == True %} Si {%endif%}</td>
-                      <td>{{ horario.total_hours }}</td>
-                      <td>{{ horario.valor_hours }}</td>
+                      <td>{{ horario.total_hours|floatformat:2}}</td>
+                      <td>$ {{ horario.valor_hours|floatformat:2 }}</td>
                   </tr>
                   {% endfor %}
               </tbody>

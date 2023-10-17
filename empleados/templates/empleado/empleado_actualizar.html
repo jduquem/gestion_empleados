@@ -1,11 +1,11 @@
-{% extends "./base.html" %}
+{% extends "../base.html" %}
 
-{% block title %} Gestión de empleados{% endblock %}
+{% block title %} Gestión de empleado{% endblock %}
 
 {% block body %}
 <div class="row">
     <div class="col-md-4 offset-md-4">
-        <h2>Edición de empleados</h2>
+        <h2>Editar empleado</h2>
         <div class="card">
             <div class="card-body">
                 <form action="{% url 'empleado_actualizar' employee.employee_id %}" method="POST">{% csrf_token %}

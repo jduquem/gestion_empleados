@@ -1,6 +1,6 @@
 import requests
 from datetime import datetime
-from .models import Employee
+from .models import Employee, EmployeeShift
 
 ### Funcion para revisar feriados incluyendo domingos
 def is_holiday(mydate):
@@ -42,7 +42,7 @@ def is_sunday(mydate):
         return False
 
 ### Funcion para calcular horas
-def calculo_Horas(entry_time_str, departure_time_str):
+def shift_hours(entry_time_str, departure_time_str):
 
     entry_time = datetime.strptime(entry_time_str, '%H:%M')
     departure_time = datetime.strptime(departure_time_str, '%H:%M')
@@ -51,27 +51,17 @@ def calculo_Horas(entry_time_str, departure_time_str):
     return total_hours
 
 # ### Funcion para calcular el valor de las horas
-# def valor_hours(employee_id):
-    
-    # salarioEmpleado = Employee.objects.filter(employee_id__in = employee_id)
-    # import pdb;pdb.set_trace()
-    # resultados = []
+def shift_money(hours, salary, is_holiday):
+    return (salary / 240) * hours * (1.75 if is_holiday else 1)
 
-    # for horario in salarioEmpleado:
-    #     salario = horario.employee.salary
-    #     horas_trabajadas = horario.total_hours
-    #     valor_horas = (salario / 240) * horas_trabajadas
 
-    # resultados.append({
-    #     'employee_id': horario.employee.employee_id,
-    #     'employee_name': horario.employee.name,
-    #     'salario': salario,
-    #     'horas_trabajadas': horas_trabajadas,
-    #     'valor_horas': valor_horas
-    # })
-    # context = {
-        
-    #     'resultados': resultados,
-    #     'valor_calculado': valor_horas
-    # }
-    # return valor_horas
+def arreglo():
+    shifts = EmployeeShift.objects.all()
+
+    for shift in shifts:
+        print(shift.holiday)
+        print(shift.employee.salary)
+        print(shift.total_hours)
+        shift.valor_hours = shift_money(shift.total_hours, shift.employee.salary, shift.holiday)
+        shift.save()
+

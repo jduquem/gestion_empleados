@@ -1,4 +1,4 @@
-{% extends "./base.html" %}
+{% extends "../base.html" %}
 {% block title %} Gestión de empleados{% endblock %}
 
 {% block body %}
@@ -10,8 +10,7 @@
             <table class="table table-striped table-hover rwd_auto ">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>identification</th>
+                        <th>Identificación</th>
                         <th>Nombre</th>
                         <th>Genero</th>
                         <th>Correo</th>
@@ -24,7 +23,6 @@
                 <tbody>
                     {% for empleado in empleados %}
                     <tr>
-                        <td>{{ forloop.counter }}</td>
                         <td>{{ empleado.identification }}</td>
                         <td>{{ empleado.name }}</td>
                         <td>{{ empleado.gender }}</td>

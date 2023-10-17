@@ -1,4 +1,4 @@
-{% extends "./base.html" %}
+{% extends "../base.html" %}
 {% block title %} Gestión de horario{% endblock %}
 
 {% block body %}
@@ -11,9 +11,8 @@
             <table class="table table-striped table-hover rwd_auto ">
                 <thead>
                     <tr>
-                        <th>#</th>
                         <th>Nombre empleado</th>
-                        <th>Fecha de registro</th>
+                        <th>Fecha</th>
                         <th>Hora de entrada</th>
                         <th>Hora de salida</th>
                         <th>Es festivo?</th>
@@ -24,7 +23,6 @@
                 <tbody>
                   {% for horario in horarios %}
                   <tr>
-                      <td>{{ forloop.counter }}</td>
                       <td>{{ horario.employee.name }}</td>
                       <td>{{ horario.date_reg|date:'d/m/Y' }}</td>
                       <td>{{ horario.entry_time }}</td>

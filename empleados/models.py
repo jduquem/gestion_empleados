@@ -17,8 +17,8 @@ from django.urls import reverse
 # employee_group.permissions.add(add_miobjeto)
 
 
-admin_group = Group.objects.create(name='Administrador')
-empleado_group = Group.objects.create(name='Empleado')
+# admin_group = Group.objects.create(name='Administrador')
+# empleado_group = Group.objects.create(name='Empleado')
 
 # user = User.objects.create_user(username='admin', password='adminpassword')
 # user.groups.add(admin_group)
