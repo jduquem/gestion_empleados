@@ -132,6 +132,7 @@ class horario_eliminar(View):
             
             horarios = get_object_or_404(EmployeeShift, id=id)
             horarios.delete()
+            messages.success(request, 'El horario se elimino correctamente')
             
             return HttpResponseRedirect(reverse('listar_horarios'))
         except Exception as e:
