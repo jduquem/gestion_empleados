@@ -6,7 +6,9 @@ from django.db.models import Avg
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import user_passes_test
 
-
+class Index(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'index.html')
 ### Clase para enviar informacion para el grafico
 # @user_passes_test(es_administrador)
 class NomineeSalaryAverage(View):

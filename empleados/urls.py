@@ -2,11 +2,11 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views_employee as employee 
 from . import views_shift as shift
-from .views import NomineeSalaryAverage, NomineeSalaryDetails
+from .views import Index, NomineeSalaryAverage, NomineeSalaryDetails
 
 urlpatterns = [
    
-  
+    path('', Index.as_view(), name='index'),
         # empleado
     path('listar_empleados/', employee.listar_empleados.as_view(), name='listar_empleados'),
     path('empleado_agregar/', employee.empleado_agregar.as_view(), name='empleado_agregar'),
