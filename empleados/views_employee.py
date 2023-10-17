@@ -1,10 +1,12 @@
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
 from .models import Employee
+from django.contrib.auth.models import User, Group
 from django.contrib import messages
 from django.urls import reverse
 from django.views import View
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import login_required, permission_required
+
 ### empleados ###
 
 # Clase para listar los empleados
@@ -32,26 +34,36 @@ class empleado_agregar(View):
             return render(request, self.template_name)    
     
     def post(self, request, *args, **kwargs):
-        # user = CustomUser.objects.create(username=request.POST['username'], password=request.POST['password'], role='employee')
-        # user = CustomUser.objects.create(username='cedula', password='123', role='boss')
-        # salary = request.POST['salary']
-        # gender = request.POST['gender'] 
-        # city = request.POST['city']
-        # phone_number = request.POST['phone_number']
-        # employee = Employee.objects.create(user=user, salary=salary, gender=gender, city=city, phone_number=phone_number)
-        identification = request.POST.get('identification')
-        name = request.POST.get('name')
-        gender = request.POST.get('gender')
-        email = request.POST.get('email')
-        numberphone = request.POST.get('numberphone')
-        salary = request.POST.get('salary')
-        city = request.POST.get('city')
-        if Employee.objects.filter(identification=identification).exists():
-            messages.warning(request, 'El empleado con cédula {} ya se encuentra creado'.format(identification))
+        
+        username = request.POST.get('identification')
+        if Employee.objects.filter(identification=username).exists():
+            messages.warning(request, 'El empleado con cédula {} ya se encuentra creado'.format(username))
             return render(request, self.template_name)
-
+        
+        if User.objects.filter(username=username).exists():
+            messages.warning(request, 'El empleado con cédula {} ya se encuentra creado'.format(username))
+            return render(request, self.template_name)
         try:
+            
+            user = User.objects.create_user(username=username, email='email@gmail.com', password=username)
+            if request.POST.get('isadmin'):
+                user.groups.add(Group.objects.get(name='Administrador'))
+                user.groups.add(Group.objects.get(name='Administradores'))
+            else:
+                user.groups.add(Group.objects.get(name='Empleado'))
+                user.groups.add(Group.objects.get(name='Empleados'))
+            user.save()
+
+            identification = request.POST.get('identification')
+            name = request.POST.get('name')
+            gender = request.POST.get('gender')
+            email = request.POST.get('email')
+            numberphone = request.POST.get('numberphone')
+            salary = request.POST.get('salary')
+            city = request.POST.get('city')
+                        
             new_employee = Employee.objects.create(
+                user=user,
                 identification=identification,
                 name=name,
                 gender=gender,
@@ -63,6 +75,7 @@ class empleado_agregar(View):
             messages.success(request, 'Se ha creado el empleado con cédula {}'.format(new_employee.identification))
             return HttpResponseRedirect(reverse('listar_empleados'))
         except Exception as e:
+            print(e)
             messages.error(request, 'Error al crear el empleado: {}'.format(str(e)))
             return render(request, self.template_name)
 
