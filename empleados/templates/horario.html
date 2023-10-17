@@ -32,9 +32,9 @@
                       <td>{%if horario.holiday == False %} No
                         {%elif horario.holiday == True %} Si
                         {%endif%}</td>
-                      <td>{{ horario.total_hours }}</td>
-                      <td><a href="{% url 'horario_actualizar' %}" class="btn btn-info">Editar</a></td>
-                      <td><a href="{% url 'horario_eliminar' %}" class="btn btn-danger">Eliminar</a></td>
+                      <td>{{ horario.total_hours|floatformat:'2' }}</td>
+                      <td><a href="{% url 'horario_actualizar' horario.id  %}" class="btn btn-info">Editar</a></td>
+                      <td><a href="{% url 'horario_eliminar' horario.id  %}" class="btn btn-danger">Eliminar</a></td>
                   </tr>
                   {% endfor %}
               </tbody>

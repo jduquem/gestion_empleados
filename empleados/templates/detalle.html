@@ -24,11 +24,11 @@
                         <th>Hora de salida</th>
                         <th>Festivo</th>
                         <th>Total horas</th>
+                        <th>Valor horas</th>
                     </tr>
                 </thead>
                 <tbody>
                   {% for horario in horarios %}
-                  <center>
                   <tr>
                       <td>{{ forloop.counter }}</td>
                       <td>{{ horario.employee.identification }}</td>
@@ -41,12 +41,10 @@
                       <td>{{ horario.date_reg|date:'d/m/Y' }}</td>
                       <td>{{ horario.entry_time }}</td>
                       <td>{{ horario.departure_time }}</td>
-                      <td>{%if horario.holiday == False %} No
-                        {%elif horario.holiday == True %} Si
-                        {%endif%}</td>
+                      <td>{%if horario.holiday == False %} No {%elif horario.holiday == True %} Si {%endif%}</td>
                       <td>{{ horario.total_hours }}</td>
+                      <td>{{ horario.valor_hours }}</td>
                   </tr>
-                </center>
                   {% endfor %}
               </tbody>
             </table>

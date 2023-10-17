@@ -1,36 +1,33 @@
-<!-- employee_salary_chart.html -->
 {% extends "./base.html" %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% block content %}
     <h2>Gráfico de Salario Promedio de Empleados</h2>
     <div>
         <canvas id="employeeSalaryChart" width="400" height="400"></canvas>
     </div>
-    <label for="" id="{{ average_salary }}"></label>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         var ctx = document.getElementById('employeeSalaryChart').getContext('2d');
-    var averageSalary = document.getElementById('average_salary') ;
-    alert(averageSalary)
-    
-    var chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Salario Promedio'],
-            datasets: [{
-                label: 'Salario Promedio',
-                data: [averageSalary],
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+        var averageSalary = {{ average_salary }};
+        
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Salario Promedio'],
+                datasets: [{
+                    label: 'Salario Promedio',
+                    data: [averageSalary],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
     </script>
 {% endblock %}

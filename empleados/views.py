@@ -4,7 +4,11 @@ from django.contrib import messages
 from django.urls import reverse
 from django.views import View
 from datetime import datetime
-
+from .utils import is_holiday, valor_hours, calculo_Horas
+from django.views.generic import TemplateView
+from django.http import JsonResponse
+from django.db.models import Avg
+from django.db.models import Q
 
 ### index
 
@@ -12,8 +16,6 @@ class index(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, 'index.html')
-
-
 
 ### empleados ###
 
@@ -27,28 +29,6 @@ class listar_detalle(View):
             return render(request, self.template_name, {'horarios':horarios})
         except:
             return render(request, self.template_name)
-        
-
-    # def get(self, request, *args, **kwargs):
-    #     try:
-    #         horarios = EmployeeShift.objects.all()
-    #         resultados = []
-
-    #         for horario in horarios:
-    #             hora_inicio = datetime.strptime(str(horario.entry_time), '%H:%M:%S').time()
-    #             hora_fin = datetime.strptime(str(horario.departure_time), '%H:%M:%S').time()
-
-    #             diferencia = datetime.combine(datetime.today(), hora_fin) - datetime.combine(datetime.today(), hora_inicio)
-
-    #             horas_en_rango = diferencia.total_seconds() / 3600
-
-    #             resultados.append({
-    #                 'horario': horario,
-    #                 'horas_en_rango': horas_en_rango,
-    #             })
-
-    #     except:
-    #         return render(request, self.template_name, {'horarios':horarios}, {'resultados': resultados})
 
 # Clase para listar los empleados
 class listar_empleados(View):
@@ -56,8 +36,7 @@ class listar_empleados(View):
 
     def get(self, request, *args, **kwargs):
         try:
-            empleados = Employee.objects.all()
-            # import pdb; pdb.set_trace()
+            empleados = Employee.objects.all().order_by('employee_id')
             return render(request, self.template_name, {'empleados':empleados})
         except Exception as e:
             print(f"Se ha producido un error: {e}")
@@ -83,7 +62,6 @@ class empleado_agregar(View):
         numberphone = request.POST.get('numberphone')
         salary = request.POST.get('salary')
         city = request.POST.get('city')
-        # import pdb; pdb.set_trace()
         if Employee.objects.filter(identification=identification).exists():
             messages.warning(request, 'El empleado con cédula {} ya se encuentra creado'.format(identification))
             return render(request, self.template_name)
@@ -109,47 +87,53 @@ class empleado_actualizar(View):
     template_name = 'empleado_actualizar.html'
     def get(self, request, employee_id):
         try:
-            posturl = request.GET.dict()
-            print(posturl)
             employee = get_object_or_404(Employee, employee_id=employee_id)
-            import pdb; pdb.set_trace()
         except Employee.DoesNotExist:
-            return render(request, 'employee_not_found.html')
+            return render(request, 'listar_empleados.html')
         return render(request, self.template_name, {'employee': employee})
 
     def post(self, request, *args, **kwargs):
         try:
-            identification = request.POST['identification']
+            employee_id = request.POST['employee_id']
             name=request.POST['name']
-            gender=request.POST['gender']
             email=request.POST['email']
             numberphone=request.POST['numberphone']
             salary=request.POST['salary']
             city=request.POST['city']
 
-            empleados = Employee.objects.get(identification =kwargs['identification'])
-            empleados.name = name
-            empleados.gender= gender
-            empleados.email= email
-            empleados.numberphone=numberphone
-            empleados.salary= salary
-            empleados.city = city
-            empleados.save()
-            return HttpResponseRedirect(reverse('empleado'))
-        except:
+            employee = get_object_or_404(Employee, employee_id=employee_id)
+            employee.name = name
+            employee.email= email
+            employee.numberphone=numberphone
+            employee.salary= salary
+            employee.city = city
+            employee.save()
+            return HttpResponseRedirect(reverse('listar_empleados'))
+        except Exception as e:
+            print(e)
             return render(request, self.template_name)
 
 # Clase para eliminar los empleados
 class empleado_eliminar(View):
     template_name = 'empleado_eliminar.html'
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, employee_id):
         try:
-            empleados = Employee.objects.get(indentification=args)
-            empleados.delete()
-            messages.warning(request, 'El empleado con cedula {} se elimino correctamente'.format(args))
-            return render(request, self.template_name)
-        except:
+            employee = get_object_or_404(Employee, employee_id=employee_id)
+        except Employee.DoesNotExist:
+            return render(request, 'listar_empleados.html')
+        return render(request, self.template_name, {'employee': employee})
+
+    def post(self, request, *args, **kwargs):
+        try:
+            employee_id = request.POST['employee_id']
+            
+            employee = get_object_or_404(Employee, employee_id=employee_id)
+            employee.delete()
+            
+            return HttpResponseRedirect(reverse('listar_empleados'))
+        except Exception as e:
+            print(e)
             return render(request, self.template_name)
 
 
@@ -161,7 +145,7 @@ class listar_horarios(View):
 
     def get(self, request, *args, **kwargs):
         try:
-            horarios = EmployeeShift.objects.all()
+            horarios = EmployeeShift.objects.all().order_by('id')
             return render(request, self.template_name, {'horarios':horarios})
         except:
             return render(request, self.template_name)
@@ -172,7 +156,6 @@ class horario_agregar(View):
 
     def get(self, request, *args, **kwargs):
         try:
-            # queryset = EmployeeShift.objects.all()
             employees = Employee.objects.all()
             return render(request, self.template_name, {'employees':employees})
         except:
@@ -187,18 +170,36 @@ class horario_agregar(View):
             else:
                 try:
                     employee_id = int(request.POST['employee'])
-                    date_reg=request.POST['date_reg']
-                    entry_time=request.POST['entry_time']
-                    departure_time=request.POST['departure_time']
-                    holiday = False
-                    total_hours = 6
-                    # import pdb; pdb.set_trace()
-                    # h_init = datetime.strptime(str(entry_time), '%H:%M').time()
-                    # h_end = datetime.strptime(str(entry_time), '%H:%M').time()
-                    # diferencia = h_end - h_init
-                    # # holiday = festivos(date_reg)
-                    # total_hours= diferencia.total_seconds() / 3600 
-                    EmployeeShift.objects.create(employee_id = employee_id, date_reg=date_reg, entry_time=entry_time, departure_time=departure_time, holiday=holiday, total_hours=total_hours)
+                    date_reg = request.POST['date_reg']
+                    entry_time_str = request.POST['entry_time']
+                    departure_time_str = request.POST['departure_time']
+
+                    # # Comprobar si ya existe un horario para el mismo empleado en la misma fecha
+                    # existing_horario = EmployeeShift.objects.filter(employee_id=employee_id, date_reg=date_reg).first()
+                    # if existing_horario:
+                    #     messages.warning(request, 'El horario para el empleado {} en la fecha {} ya se encuentra creado'.format(employee_id, date_reg))
+                    #     return render(request, self.template_name)
+
+                    # Comprobar si el nuevo horario se cruza con horarios existentes
+
+                    import pdb; pdb.set_trace()
+                    horarios_Cruzados = EmployeeShift.objects.filter(
+                        Q(employee_id=employee_id, date_reg=date_reg) &
+                        (
+                            Q(entry_time__lte=entry_time_str, departure_time__gte=entry_time_str) |
+                            Q(entry_time__lte=departure_time_str, departure_time__gte=departure_time_str)
+                        )
+                    )
+
+                    if horarios_Cruzados.exists():
+                        print(f'el horario {horarios_Cruzados} ya existe')
+                        messages.warning(request, 'El nuevo horario se cruza con otros horarios existentes para el mismo empleado en la misma fecha')
+                        return render(request, self.template_name)
+
+                    total_hours = calculo_Horas(entry_time_str, departure_time_str)
+                    holiday = is_holiday(date_reg)
+                    val_hours = 200
+                    EmployeeShift.objects.create(employee_id = employee_id, date_reg=date_reg, entry_time=entry_time_str, departure_time=departure_time_str, holiday=holiday, total_hours=total_hours, valor_hours=val_hours)
                     messages.success(request, 'Se ha creado el horario para el empleado')
                     return HttpResponseRedirect(reverse('listar_horarios'))
                 except Exception as e:
@@ -210,103 +211,62 @@ class horario_agregar(View):
 class horario_actualizar(View):
     template_name = 'horario_actualizar.html'
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, id):
         try:
-            queryset = EmployeeShift.objects.all()
-            return render(request, self.template_name, {'queryset':queryset})
-        except:
-            return render(request, self.template_name)
+            horarios = get_object_or_404(EmployeeShift, id=id)
+        except Employee.DoesNotExist:
+            return render(request, 'listar_horarios.html')
+        return render(request, self.template_name, {'horarios': horarios})
 
     def post(self, request, *args, **kwargs):
         try:
-            employee=request.POST['employee']
-            date_reg=request.POST['date_reg']
-            entry_time=request.POST['entry_time']
-            departure_time=request.POST['departure_time']
-            h_init = datetime.strptime(entry_time, "%H:%M:%S")
-            h_end = datetime.strptime(departure_time, "%H:%M:%S")
-            diferencia = h_end - h_init
-            # holiday = festivos(date_reg)
-            total_hours= diferencia.total_seconds() / 3600 
-
-            empleados = EmployeeShift.objects.get(employee=kwargs['employee'])
-            empleados.date_reg = date_reg
-            empleados.entry_time= entry_time
-            empleados.departure_time= departure_time
-            empleados.total_hours=total_hours
-            empleados.save()
-            return HttpResponseRedirect(reverse('horario'))
-        except:
+            id = request.POST['id']
+            date_reg = request.POST['date_reg'] # fecha
+            entry_time_str = request.POST['entry_time'] 
+            departure_time_str = request.POST['departure_time']
+            entry_time = datetime.strptime(entry_time_str, '%H:%M')
+            departure_time = datetime.strptime(departure_time_str, '%H:%M')
+            time_difference = departure_time - entry_time
+            total_hours = time_difference.total_seconds() / 3600
+            holiday = is_holiday(date_reg)
+            
+            horarios = get_object_or_404(EmployeeShift, id=id)
+            horarios.date_reg = date_reg
+            horarios.entry_time= entry_time
+            horarios.departure_time= departure_time
+            horarios.total_hours=total_hours
+            horarios.holiday=holiday
+            horarios.save()
+            return HttpResponseRedirect(reverse('listar_horarios'))
+        except Exception as e:
+            print(e)
             return render(request, self.template_name)
 
 # Clase para eliminar los horarios
 class horario_eliminar(View):
     template_name = 'horario_eliminar.html'
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, id):
         try:
-            horarios = EmployeeShift.objects.get(employee=args)
+            horarios = get_object_or_404(EmployeeShift, id=id)
+        except EmployeeShift.DoesNotExist:
+            return render(request, 'listar_horarios.html')
+        return render(request, self.template_name, {'horarios': horarios})
+
+    def post(self, request, *args, **kwargs):
+        try:
+            id = request.POST['id']
+            
+            horarios = get_object_or_404(EmployeeShift, id=id)
             horarios.delete()
-            messages.warning(request, 'El horario para el empleado {} se elimino correctamente'.format(args))
+            
+            return HttpResponseRedirect(reverse('listar_horarios'))
+        except Exception as e:
+            print(e)
             return render(request, self.template_name)
-        except:
-            return render(request, self.template_name)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def festivos(fecha):
-#     # Definir la URL de la API y los parámetros
-#     api_url = "https://date.nager.at/api/v3/publicholidays/2023/CO"
-#     country_code = "CO"  # Código de país (ejemplo: Colombia)
-#     # Parámetros de la solicitud
-#     params = {
-#         "CountryCode": country_code,
-#         "Year": 2023  # Puedes ajustar el año
-#     }
-#     # Realizar la solicitud a la API
-#     response = requests.get(api_url, params=params)
-#     # Verificar si la solicitud fue exitosa
-#     if response.status_code == 200:
-#         # La solicitud fue exitosa
-#         holidays = response.json()
-#         for holiday in holidays:
-#             print(f"{holiday['date']}")
-#     else:
-#         # La solicitud no fue exitosa
-#         print(f"Error {response.status_code}: No se pudo obtener la información de días festivos.")
-#     return 
-
-# # Define la fecha que quieres verificar
-
-# fecha = datetime.date(2023, 10, 16)  # Formato: año, mes, día (2023-10-15)
-
-# # Verifica si la fecha es un domingo (0 = lunes, 6 = domingo)
-# es_domingo = fecha.weekday() == 6
-
-# if es_domingo:
-#     print(f"{fecha} es un domingo.")
-# else:
-#     print(f"{fecha} no es un domingo.")
-
-
-# views.py
-from django.views.generic import TemplateView
-from django.http import JsonResponse
-from .models import Employee
-from django.db.models import Avg
+### Clase para enviar informacion para el grafico
 
 class EmployeeSalaryChartView(TemplateView):
     template_name = 'employee_salary_chart.html'

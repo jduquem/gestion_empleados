@@ -9,17 +9,16 @@
         <h2>Eliminar empleado</h2>
         <div class="card">
             <div class="card-body">
-                <form action="{% url 'empleado_eliminar' %}" method="POST">{% csrf_token %}
+                <form action="{% url 'empleado_eliminar' employee.employee_id %}" method="POST">{% csrf_token %}
                     <div class="form-group">
-                        <input type="text" id="identification" name="identification" value="{{empleado}}" class="form-control" placeholder="identification"
-                            minlength="6" maxlength="6" hidden>
+                        <input type="text" id="employee_id" name="employee_id" value="{{employee.employee_id}}" class="form-control" hidden required>
                     </div>
                     <div class="alert alert-danger" role="alert">
-                        Esta seguro que desea eliminar el empleado {{empleados}}
+                        Esta seguro que desea eliminar el empleado {{employee.name }} - {{employee.identification }}
                       </div>
                     <div class="form-group">
                         <button type="submit" type="button" class="btn btn-danger" >Aceptar</button>
-                        <a href="{% url 'empleados' %}" class="btn btn-secondary">Cancelar</a>
+                        <a href="{% url 'listar_empleados' %}" class="btn btn-secondary">Cancelar</a>
                     </div>
                 </form>
 

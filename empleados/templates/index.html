@@ -1,26 +1,25 @@
-
 <table>
     <tr>
-        <td>Empleados</td>
-        <td><label for="">Listar los empleados</label></td>
-        <td><a href="{% url 'listar_detalle' %}" class="btn btn-info">Listar los empleados </a></td>
-        <td><label for="">Crear empleados</label></td>
-        <td><a href="{% url 'empleado_agregar' %}" class="btn btn-info"> Crear empleados </a></td>
-        <td>Editar los empleados Falta por relacionar los id que se van en la URL</td>
-        Eliminar los empleados Falta por relacionar los id que se van en la URL
-
-        Detalle
-        Listar el detalle lista pero falta:
-            - no mostrar mas de un regisro la misma fecha
-
-        Horarios
-        Listar los horarios <td><a href="{% url 'listar_horarios' %}" class="btn btn-info"> listar horarios </a></td>
-        Crear horarios <td><a href="{% url 'horario_agregar' %}" class="btn btn-info"> crear horarios </a></td>
-        Editar horarios Falta
-        Eliminar horarios Falta
-
-        Crear reporte
-        crear roles
-        Fin
+        <td><strong>Empleados</strong></td>
+        <td><a href="{% url 'listar_empleados' %}" class="btn btn-info">Listar empleados</a></td>
+        <td><a href="{% url 'empleado_agregar' %}" class="btn btn-info">Crear empleados</a></td>
+        <td><label for="">Editar empleados</label> Falta por relacionar los IDs que se van en la URL</td>
+        <td><label for="">Eliminar empleados</label> Falta por relacionar los IDs que se van en la URL</td>
+    </tr>
+    <tr>
+        <td><strong>Detalle</strong></td>
+        <td colspan="6">Listar el detalle, pero falta:<br>- No mostrar más de un registro en la misma fecha</td>
+    </tr>
+    <tr>
+        <td><strong>Horarios</strong></td>
+        <td><a href="{% url 'listar_horarios' %}" class="btn btn-info">Listar horarios</a></td>
+        <td><a href="{% url 'horario_agregar' %}" class="btn btn-info">Crear horarios</a></td>
+        <td><label for="">Editar horarios</label> Falta</td>
+        <td><label for="">Eliminar horarios</label> Falta</td>
+    </tr>
+    <tr>
+        <td><strong>Crear reporte</strong></td>
+        <td colspan="5">Crear roles</td>
+        <td><strong>Fin</strong></td>
     </tr>
 </table>

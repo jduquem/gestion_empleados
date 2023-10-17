@@ -8,18 +8,21 @@
         <h2>Edición de horarios</h2>
         <div class="card">
             <div class="card-body">
-                <form action="{% url 'horario_actualizar' %}" method="POST">{% csrf_token %}
+                <form action="{% url 'horario_actualizar' horarios.id %}" method="POST">{% csrf_token %}
                     <div class="form-group">
-                        <input type="number" id="employee" name="employee" value="{{ horario.employee.identification}}" class="form-control" readonly required>
+                        <input type="text" id="name" name="name" value="{{horarios.employee.name}}" class="form-control" readonly required>
                     </div>
                     <div class="form-group">
-                        <input type="date" id="date_reg" date_reg="date_reg" value="{{date_reg}}" class="form-control" required>
+                        <input type="number" id="id" name="id" value="{{ horarios.id}}" class="form-control" hidden required>
                     </div>
                     <div class="form-group">
-                        <input type="time" id="entry_time" name="entry_time" value="{{entry_time}}" class="form-control" value="1" required>
+                        <input type="date" id="date_reg" name="date_reg"  value="{{horarios.date_reg}}" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <input type="time" id="departure_time" name="departure_time" value="{{departure_time}}" class="form-control" value="1" required>
+                        <input type="time" id="entry_time" name="entry_time" value="{{horarios.entry_time}}" class="form-control" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="time" id="departure_time" name="departure_time" value="{{horarios.departure_time}}" class="form-control" value="1" required>
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-success btn-block text-white">Guardar</button>

@@ -33,7 +33,7 @@
                         <td>$ {{ empleado.salary }}</td>
                         <td>{{ empleado.city }}</td>
                         <td><a href="{% url 'empleado_actualizar' empleado.employee_id  %}" class="btn btn-info">Editar</a></td>
-                        <td><a href="{ % url 'empleado_eliminar' empleado.employee_id  % }" class="btn btn-danger">Eliminar</a></td>
+                        <td><a href="{% url 'empleado_eliminar' empleado.employee_id  %}" class="btn btn-danger">Eliminar</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
