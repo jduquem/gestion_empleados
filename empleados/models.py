@@ -26,15 +26,18 @@ from django.contrib.auth.models import AbstractUser
 # user.groups.add(admin_group)
 
 # empleado = User.objects.create_user(username='emleado', password='empleadopassword')
-class CustomUser(AbstractUser):
-    ROLES = [
-        ('boss', 'Boss'),
-        ('employee', 'Employee'),
-    ]
-    role = models.CharField(max_length=10, choices=ROLES, default='employee')
+# class CustomUser(AbstractUser):
+#     ROLES = [
+#         ('boss', 'Boss'),
+#         ('employee', 'Employee'),
+#     ]
+#     role = models.CharField(max_length=10, choices=ROLES, default='employee')
+# class CustomUser(AbstractUser):
+#    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
 
 class Employee(models.Model):
-    
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     employee_id = models.AutoField(primary_key=True)
     identification = models.CharField(max_length=20, unique=True)
     name = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False)
