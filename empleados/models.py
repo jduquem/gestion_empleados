@@ -1,10 +1,24 @@
 from django.db import models
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, Permission
 from django.urls import reverse
 
+# admin_group, created = Group.objects.get_or_create(name='Administradores')
+# employee_group, created = Group.objects.get_or_create(name='Empleados')
+# # Obtener un usuario (reemplaza con tu propio método)
+# user = User.objects.get(username='nombre_de_usuario')
+# # Asignar usuario al grupo de administradores
+# user.groups.add(admin_group)
+# # Asignar usuario al grupo de empleados
+# user.groups.add(employee_group)
+# add_miobjeto = Permission.objects.create(codename='add_miobjeto', name='Can add MiObjeto')
+# change_miobjeto = Permission.objects.create(codename='change_miobjeto', name='Can change MiObjeto')
+# delete_miobjeto = Permission.objects.create(codename='delete_miobjeto', name='Can delete MiObjeto')
+# admin_group.permissions.add(add_miobjeto, change_miobjeto, delete_miobjeto)
+# employee_group.permissions.add(add_miobjeto)
 
-# admin_group = Group.objects.create(name='Administrador')
-# empleado_group = Group.objects.create(name='Empleado')
+
+admin_group = Group.objects.create(name='Administrador')
+empleado_group = Group.objects.create(name='Empleado')
 
 # user = User.objects.create_user(username='admin', password='adminpassword')
 # user.groups.add(admin_group)

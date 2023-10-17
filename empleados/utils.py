@@ -50,12 +50,12 @@ def calculo_Horas(entry_time_str, departure_time_str):
     total_hours = time_difference.total_seconds() / 3600
     return total_hours
 
-### Funcion para calcular el valor de las horas
-def valor_hours(employee_id):
+# ### Funcion para calcular el valor de las horas
+# def valor_hours(employee_id):
     
-    salarioEmpleado = Employee.objects.filter(employee_id__in = employee_id)
-    import pdb;pdb.set_trace()
-    resultados = []
+    # salarioEmpleado = Employee.objects.filter(employee_id__in = employee_id)
+    # import pdb;pdb.set_trace()
+    # resultados = []
 
     # for horario in salarioEmpleado:
     #     salario = horario.employee.salary
@@ -74,4 +74,4 @@ def valor_hours(employee_id):
     #     'resultados': resultados,
     #     'valor_calculado': valor_horas
     # }
-    return valor_horas
+    # return valor_horas

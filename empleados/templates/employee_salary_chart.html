@@ -4,10 +4,11 @@
     <div>
         <canvas id="employeeSalaryChart" width="400" height="400"></canvas>
     </div>
+    <label for="" id="average_salary">{{ average_salary }}</label>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         var ctx = document.getElementById('employeeSalaryChart').getContext('2d');
-        var averageSalary = {{ average_salary }};
+        var averageSalary = parseFloat(document.getElementById('average_salary').textContent);
         
         var chart = new Chart(ctx, {
             type: 'bar',

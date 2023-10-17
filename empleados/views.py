@@ -4,11 +4,12 @@ from django.contrib import messages
 from django.urls import reverse
 from django.views import View
 from datetime import datetime
-from .utils import is_holiday, valor_hours, calculo_Horas
+from .utils import is_holiday, calculo_Horas ## ,valor_hours
 from django.views.generic import TemplateView
 from django.http import JsonResponse
-from django.db.models import Avg
-from django.db.models import Q
+from django.db.models import Avg, Q
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import user_passes_test
 
 ### index
 
@@ -242,7 +243,10 @@ class horario_actualizar(View):
             print(e)
             return render(request, self.template_name)
 
+
+
 # Clase para eliminar los horarios
+# @user_passes_test(es_administrador)
 class horario_eliminar(View):
     template_name = 'horario_eliminar.html'
 
@@ -284,3 +288,22 @@ class EmployeeSalaryChartView(TemplateView):
         # Retorna los datos del salario promedio en formato JSON
         data = {'average_salary': context['average_salary']}
         return JsonResponse(data)
+
+
+
+    # def iniciar_sesion(request):
+    #     if request.method == 'POST':
+    #         form = AuthenticationForm(request, request.POST)
+    #         if form.is_valid():
+    #             # El usuario ha iniciado sesión exitosamente
+    #             # Puedes redirigirlo a una página de inicio, por ejemplo
+    #             return HttpResponseRedirect('/inicio/')
+
+    #     else:
+    #         form = AuthenticationForm()
+        
+    #     return render(request, 'login.html', {'form': form})
+
+
+def es_administrador(user):
+    return user.groups.filter(name='Administradores').exists()

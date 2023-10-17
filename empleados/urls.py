@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import listar_empleados, empleado_agregar, empleado_actualizar, empleado_eliminar, listar_horarios, horario_agregar, horario_actualizar, horario_eliminar, listar_detalle, EmployeeSalaryChartView, index
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
    
@@ -22,4 +23,9 @@ urlpatterns = [
       # reporte
     path('EmployeeSalaryChartView/', EmployeeSalaryChartView.as_view(), name='EmployeeSalaryChartView'),
     path('listar_detalle/', listar_detalle.as_view(), name='listar_detalle'),
+
+    
+      # login
+    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
  ]

@@ -17,9 +17,10 @@
                     <span class="navbar-toggler-icon"></span>
                     </button>
                 </div>
+                <td><a href="{% url 'listar_detalle'  %}" class="btn btn-info">listar detalle</a></td>
                 <td><a href="{% url 'listar_empleados'  %}" class="btn btn-info">listar empleados</a></td>
                 <td><a href="{% url 'listar_horarios'  %}" class="btn btn-info">listar horarios</a></td>
-                <td><a href="{% url 'listar_detalle'  %}" class="btn btn-info">listar detalle</a></td>
+                <td><a href="{% url 'EmployeeSalaryChartView'  %}" class="btn btn-info">Reporte</a></td>
             </nav>
             <div class="cotainer py-4">
                 {%block body%}
