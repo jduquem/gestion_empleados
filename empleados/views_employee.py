@@ -1,13 +1,14 @@
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
-from .models import Employee
+from .models import Employee, CustomUser
 from django.contrib import messages
 from django.urls import reverse
 from django.views import View
-
-
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required, permission_required
 ### empleados ###
 
 # Clase para listar los empleados
+# @user_passes_test(es_administrador)
 class listar_empleados(View):
     template_name = 'empleado/empleado.html'
 
@@ -31,7 +32,13 @@ class empleado_agregar(View):
             return render(request, self.template_name)    
     
     def post(self, request, *args, **kwargs):
-        
+        # user = CustomUser.objects.create(username=request.POST['username'], password=request.POST['password'], role='employee')
+        user = CustomUser.objects.create(username='cedula', password='123', role='boss')
+        salary = request.POST['salary']
+        gender = request.POST['gender'] 
+        city = request.POST['city']
+        phone_number = request.POST['phone_number']
+        employee = Employee.objects.create(user=user, salary=salary, gender=gender, city=city, phone_number=phone_number)
         identification = request.POST.get('identification')
         name = request.POST.get('name')
         gender = request.POST.get('gender')

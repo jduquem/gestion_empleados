@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, Group, Permission
 from django.urls import reverse
-
+from django.contrib.auth.models import AbstractUser
 # admin_group, created = Group.objects.get_or_create(name='Administradores')
 # employee_group, created = Group.objects.get_or_create(name='Empleados')
 # # Obtener un usuario (reemplaza con tu propio método)
@@ -17,6 +17,8 @@ from django.urls import reverse
 # employee_group.permissions.add(add_miobjeto)
 
 
+# admin_group, created = Group.objects.get_or_create(name='Administradores')
+# employee_group, created = Group.objects.get_or_create(name='Empleados')
 # admin_group = Group.objects.create(name='Administrador')
 # empleado_group = Group.objects.create(name='Empleado')
 
@@ -24,8 +26,15 @@ from django.urls import reverse
 # user.groups.add(admin_group)
 
 # empleado = User.objects.create_user(username='emleado', password='empleadopassword')
+class CustomUser(AbstractUser):
+    ROLES = [
+        ('boss', 'Boss'),
+        ('employee', 'Employee'),
+    ]
+    role = models.CharField(max_length=10, choices=ROLES, default='employee')
 
 class Employee(models.Model):
+    
     employee_id = models.AutoField(primary_key=True)
     identification = models.CharField(max_length=20, unique=True)
     name = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False)
