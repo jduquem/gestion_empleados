@@ -6,13 +6,9 @@ from django.views.generic import View
 from django.http import JsonResponse
 from django.db.models import Avg
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test, login_required
-from django.utils.decorators import method_decorator
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .utils import arreglo
 import json
-
 
 
 def group_required(user, group_names, request, show=False):    
@@ -37,7 +33,10 @@ class NomineeSalaryDetails(LoginRequiredMixin, View):
         if not group_required(request.user, ['Administrador', 'Empleado'], request):
             return HttpResponseRedirect(reverse('index'))
         try:
-            horarios = EmployeeShift.objects.all().order_by('id')
+            if not group_required(request.user, ['Administrador'], request):
+                horarios = EmployeeShift.objects.filter(employee_id=Employee.objects.get(user=request.user.id).employee_id).order_by('id')
+            else:    
+                horarios = EmployeeShift.objects.all().order_by('id')
             return render(request, self.template_name, {'horarios':horarios})
         except:
             return render(request, self.template_name)
