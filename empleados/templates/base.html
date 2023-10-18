@@ -11,7 +11,6 @@
 
         </head>
         <body>
-
             <nav class="navbar navbar-expand-lg navbar-light bg-info">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="/">Empleados</a>
@@ -19,10 +18,17 @@
                     <span class="navbar-toggler-icon"></span>
                     </button>
                 </div>
-                <td><a href="{% url 'listar_empleados'  %}" class="btn btn-info">Empleados</a></td>
-                <td><a href="{% url 'listar_horarios'  %}" class="btn btn-info">Horarios</a></td>
-                <td><a href="{% url 'nominee_salary_details'  %}" class="btn btn-info">Nómina</a></td>
-                <td><a href="{% url 'nominee_salary_average'  %}" class="btn btn-info">Reporte</a></td>
+                {% if request.user.is_authenticated %}
+                    {% if request.user.groups.all.0.name == "Administrador" %} 
+                        <td><a href="{% url 'listar_empleados'  %}" class="btn btn-info">Empleados</a></td>
+                        <td><a href="{% url 'listar_horarios'  %}" class="btn btn-info">Horarios</a></td>
+                    {% endif %}
+                    <td><a href="{% url 'nominee_salary_details'  %}" class="btn btn-info">Nómina</a></td>
+                    <td><a href="{% url 'nominee_salary_average'  %}" class="btn btn-info">Reporte</a></td>
+                    <td><a href="{% url 'logout'  %}" class="btn btn-info">{{request.user.username}} Cerrar sesión</a></td>
+                {% else %}
+                    <td><a href="{% url 'login'  %}" class="btn btn-info">Iniciar sesión</a></td>
+                {% endif %}
             </nav>
             <div class="cotainer py-4">
                 {% load humanize %}

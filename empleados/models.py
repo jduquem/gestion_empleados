@@ -35,7 +35,6 @@ from django.contrib.auth.models import AbstractUser
 # class CustomUser(AbstractUser):
 #    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     employee_id = models.AutoField(primary_key=True)
