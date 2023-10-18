@@ -69,7 +69,7 @@ class horario_actualizar(View):
         try:
             horarios = get_object_or_404(EmployeeShift, id=id)
         except Employee.DoesNotExist:
-            return render(request, 'horario/listar_horarios.html')
+            return HttpResponseRedirect(reverse('listar_horarios'))
         return render(request, self.template_name, {'horarios': horarios})
 
     def post(self, request, *args, **kwargs):
@@ -113,7 +113,7 @@ class horario_eliminar(View):
         try:
             horarios = get_object_or_404(EmployeeShift, id=id)
         except EmployeeShift.DoesNotExist:
-            return render(request, 'horario/listar_horarios.html')
+            return HttpResponseRedirect(reverse('listar_horarios'))
         return render(request, self.template_name, {'horarios': horarios})
 
     def post(self, request, *args, **kwargs):
@@ -126,6 +126,6 @@ class horario_eliminar(View):
             
             return HttpResponseRedirect(reverse('listar_horarios'))
         except Exception as e:
-            print(e)
-            return render(request, self.template_name)
+            messages.warning(request, f'El nuevo horario no se pudo eliminar {e}')
+            return HttpResponseRedirect(reverse('listar_horarios'))
 

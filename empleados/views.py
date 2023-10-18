@@ -9,6 +9,8 @@ from .utils import arreglo
 from django.db.models.functions import TruncMonth
 from django.db.models import Sum, Count
 import json
+
+
 class Index(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'index.html')

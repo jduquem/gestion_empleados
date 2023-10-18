@@ -86,7 +86,7 @@ class empleado_actualizar(View):
         try:
             employee = get_object_or_404(Employee, employee_id=employee_id)
         except Employee.DoesNotExist:
-            return render(request, 'listar_empleados.html')
+            return HttpResponseRedirect(reverse('listar_empleados'))
         return render(request, self.template_name, {'employee': employee})
 
     def post(self, request, *args, **kwargs):
@@ -105,10 +105,11 @@ class empleado_actualizar(View):
             employee.salary= salary
             employee.city = city
             employee.save()
+            messages.success(request, 'Se ha modificado el empleado con cédula {}'.format(employee.identification))
             return HttpResponseRedirect(reverse('listar_empleados'))
         except Exception as e:
-            print(e)
-            return render(request, self.template_name)
+            messages.warning(request, 'Se ha producido un error')
+            return HttpResponseRedirect(reverse('listar_empleados'))
 
 # Clase para eliminar los empleados
 class empleado_eliminar(View):
@@ -118,7 +119,7 @@ class empleado_eliminar(View):
         try:
             employee = get_object_or_404(Employee, employee_id=employee_id)
         except Employee.DoesNotExist:
-            return render(request, 'listar_empleados.html')
+            return HttpResponseRedirect(reverse('listar_empleados'))
         return render(request, self.template_name, {'employee': employee})
 
     def post(self, request, *args, **kwargs):
@@ -127,8 +128,8 @@ class empleado_eliminar(View):
             
             employee = get_object_or_404(Employee, employee_id=employee_id)
             employee.delete()
-            
+            messages.success(request, 'Se ha eliminado el empleado con cédula {}'.format(employee.identification))
             return HttpResponseRedirect(reverse('listar_empleados'))
         except Exception as e:
-            print(e)
-            return render(request, self.template_name)
+            messages.success(request, 'El empleado no se pudo eliminar')
+            return HttpResponseRedirect(reverse('listar_empleados'))
