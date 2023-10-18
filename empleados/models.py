@@ -1,39 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User, Group, Permission
-from django.urls import reverse
-from django.contrib.auth.models import AbstractUser
-# admin_group, created = Group.objects.get_or_create(name='Administradores')
-# employee_group, created = Group.objects.get_or_create(name='Empleados')
-# # Obtener un usuario (reemplaza con tu propio método)
-# user = User.objects.get(username='nombre_de_usuario')
-# # Asignar usuario al grupo de administradores
-# user.groups.add(admin_group)
-# # Asignar usuario al grupo de empleados
-# user.groups.add(employee_group)
-# add_miobjeto = Permission.objects.create(codename='add_miobjeto', name='Can add MiObjeto')
-# change_miobjeto = Permission.objects.create(codename='change_miobjeto', name='Can change MiObjeto')
-# delete_miobjeto = Permission.objects.create(codename='delete_miobjeto', name='Can delete MiObjeto')
-# admin_group.permissions.add(add_miobjeto, change_miobjeto, delete_miobjeto)
-# employee_group.permissions.add(add_miobjeto)
+from django.contrib.auth.models import User
 
-
-# admin_group, created = Group.objects.get_or_create(name='Administradores')
-# employee_group, created = Group.objects.get_or_create(name='Empleados')
-# admin_group = Group.objects.create(name='Administrador')
-# empleado_group = Group.objects.create(name='Empleado')
-
-# user = User.objects.create_user(username='admin', password='adminpassword')
-# user.groups.add(admin_group)
-
-# empleado = User.objects.create_user(username='emleado', password='empleadopassword')
-# class CustomUser(AbstractUser):
-#     ROLES = [
-#         ('boss', 'Boss'),
-#         ('employee', 'Employee'),
-#     ]
-#     role = models.CharField(max_length=10, choices=ROLES, default='employee')
-# class CustomUser(AbstractUser):
-#    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -46,7 +13,7 @@ class Employee(models.Model):
     salary = models.PositiveIntegerField(verbose_name='Salario')
     city = models.CharField(verbose_name='Ciudad', max_length=50)
 
-    def _str_(self):
+    def __str__(self):
         return self.identification
 
 class EmployeeShift(models.Model):
@@ -58,6 +25,5 @@ class EmployeeShift(models.Model):
     total_hours = models.FloatField(verbose_name='Total horas', default=0)
     valor_hours = models.FloatField(verbose_name='Total horas', default=0)
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.employee} - {self.date_reg}"
-        
