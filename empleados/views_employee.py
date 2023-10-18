@@ -1,40 +1,45 @@
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
-from .models import Employee
 from django.contrib.auth.models import User, Group
 from django.contrib import messages
 from django.urls import reverse
 from django.views import View
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Employee
+from .views import group_required
 
-### empleados ###
 
-# Clase para listar los empleados
-# @user_passes_test(es_administrador)
-class listar_empleados(View):
+class listar_empleados(LoginRequiredMixin, View):
     template_name = 'empleado/empleado.html'
 
     def get(self, request, *args, **kwargs):
         try:
-            empleados = Employee.objects.all().order_by('employee_id')
+            if not group_required(request.user, ['Administrador', 'Empleado'], request, True):
+                return HttpResponseRedirect(reverse('index'))
+            if not group_required(request.user, ['Administrador'], request):
+                empleados = Employee.objects.filter(user=request.user.id)
+            else:    
+                empleados = Employee.objects.all().order_by('employee_id')
             return render(request, self.template_name, {'empleados':empleados})
         except Exception as e:
             print(f"Se ha producido un error: {e}")
             return render(request, self.template_name)
 
-# Clase para agregar los empleados
-class empleado_agregar(View):
+
+class empleado_agregar(LoginRequiredMixin, View):
     template_name = 'empleado/empleado_agregar.html'
 
     def get(self, request, *args, **kwargs):
         try:
+            if not group_required(request.user, ['Administrador'], request, True):
+                return HttpResponseRedirect(reverse('index'))
             queryset = Employee.objects.all()
             return render(request, self.template_name, {'queryset':queryset})
         except:
             return render(request, self.template_name)    
     
     def post(self, request, *args, **kwargs):
-        
+        if not group_required(request.user, ['Administrador'], request, True):
+            return HttpResponseRedirect(reverse('index'))
         username = request.POST.get('identification')
         if Employee.objects.filter(identification=username).exists():
             messages.warning(request, 'El empleado con cédula {} ya se encuentra creado'.format(username))
@@ -75,15 +80,16 @@ class empleado_agregar(View):
             messages.success(request, 'Se ha creado el empleado con cédula {}'.format(new_employee.identification))
             return HttpResponseRedirect(reverse('listar_empleados'))
         except Exception as e:
-            print(e)
             messages.error(request, 'Error al crear el empleado: {}'.format(str(e)))
             return render(request, self.template_name)
 
-# Clase para modificar los empleados
-class empleado_actualizar(View):
+
+class empleado_actualizar(LoginRequiredMixin, View):
     template_name = 'empleado/empleado_actualizar.html'
     def get(self, request, employee_id):
         try:
+            if not group_required(request.user, ['Administrador'], request, True):
+                return HttpResponseRedirect(reverse('index'))
             employee = get_object_or_404(Employee, employee_id=employee_id)
         except Employee.DoesNotExist:
             return HttpResponseRedirect(reverse('listar_empleados'))
@@ -91,6 +97,8 @@ class empleado_actualizar(View):
 
     def post(self, request, *args, **kwargs):
         try:
+            if not group_required(request.user, ['Administrador'], request, True):
+                return HttpResponseRedirect(reverse('index'))
             employee_id = request.POST['employee_id']
             name=request.POST['name']
             email=request.POST['email']
@@ -111,12 +119,14 @@ class empleado_actualizar(View):
             messages.warning(request, 'Se ha producido un error')
             return HttpResponseRedirect(reverse('listar_empleados'))
 
-# Clase para eliminar los empleados
-class empleado_eliminar(View):
+
+class empleado_eliminar(LoginRequiredMixin, View):
     template_name = 'empleado/empleado_eliminar.html'
 
     def get(self, request, employee_id):
         try:
+            if not group_required(request.user, ['Administrador'], request, True):
+                return HttpResponseRedirect(reverse('index'))
             employee = get_object_or_404(Employee, employee_id=employee_id)
         except Employee.DoesNotExist:
             return HttpResponseRedirect(reverse('listar_empleados'))
@@ -124,8 +134,9 @@ class empleado_eliminar(View):
 
     def post(self, request, *args, **kwargs):
         try:
+            if not group_required(request.user, ['Administrador'], request, True):
+                return HttpResponseRedirect(reverse('index'))
             employee_id = request.POST['employee_id']
-            
             employee = get_object_or_404(Employee, employee_id=employee_id)
             employee.delete()
             messages.success(request, 'Se ha eliminado el empleado con cédula {}'.format(employee.identification))

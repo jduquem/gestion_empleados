@@ -1,38 +1,48 @@
 from .models import Employee, EmployeeShift
+from django.shortcuts import HttpResponseRedirect
 from django.shortcuts import render
-from django.views.generic import TemplateView, View
+from django.urls import reverse
+from django.views.generic import View
 from django.http import JsonResponse
 from django.db.models import Avg
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test, login_required
+from django.utils.decorators import method_decorator
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .utils import arreglo
-from django.db.models.functions import TruncMonth
-from django.db.models import Sum, Count
 import json
 
 
-class Index(View):
+
+def group_required(user, group_names, request, show=False):    
+    for group in user.groups.all():
+        for group_name in group_names: 
+            print(f'{group.name} vs {group_name}')
+            if group.name == group_name:
+                print('granted')
+                return True
+    if show:
+        messages.warning(request, 'Usuario restringido')
+    return False
+
+class Index(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'index.html')
     
-
-class NomineeSalaryDetails(View):
+class NomineeSalaryDetails(LoginRequiredMixin, View):
     template_name = 'nomina/NomineeSalaryDetails.html'
-    # @login_required
+    
     def get(self, request, *args, **kwargs):
+        if not group_required(request.user, ['Administrador', 'Empleado'], request):
+            return HttpResponseRedirect(reverse('index'))
         try:
             horarios = EmployeeShift.objects.all().order_by('id')
             return render(request, self.template_name, {'horarios':horarios})
         except:
             return render(request, self.template_name)
-           
-### Clase para enviar informacion para el grafico
-# @user_passes_test(es_administrador)
 
-
-        
-
-class Chart(View):
+class Chart(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'nomina/chart.html')
 
@@ -70,25 +80,6 @@ def NomineeSalaryAverage(request):
 #             return render(request, self.template_name, {'average_salary':average_salary})
 #         except:
 #             return render(request, self.template_name)
-
-
-
-        
-    # def iniciar_sesion(request):
-    #     if request.method == 'POST':
-    #         form = AuthenticationForm(request, request.POST)
-    #         if form.is_valid():
-    #             # El usuario ha iniciado sesión exitosamente
-    #             # Puedes redirigirlo a una página de inicio, por ejemplo
-    #             return HttpResponseRedirect('/inicio/')
-
-    #     else:
-    #         form = AuthenticationForm()
-        
-    #     return render(request, 'login.html', {'form': form})
-
-# def es_administrador(user):
-#     return user.groups.filter(name='Administradores').exists()
 
 
 # class SalaryTotalByMonth(View):

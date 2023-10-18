@@ -3,35 +3,43 @@ from .models import Employee, EmployeeShift
 from django.contrib import messages
 from django.urls import reverse
 from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
 from .utils import is_holiday, shift_hours, shift_money, shift_validations
+from .views import group_required
 
-from django.db.models import Q
 
-### horarios ###
-# Clase para listar los horarios
-class listar_horarios(View):
+class listar_horarios(LoginRequiredMixin, View):
     template_name = 'horario/horario.html'
 
     def get(self, request, *args, **kwargs):
         try:
-            horarios = EmployeeShift.objects.all().order_by('id')
+            if not group_required(request.user, ['Administrador', 'Empleado'], request, True):
+                return HttpResponseRedirect(reverse('index'))
+            if not group_required(request.user, ['Administrador'], request):
+                horarios = EmployeeShift.objects.filter(employee_id=Employee.objects.get(user=request.user.id).employee_id)
+            else:    
+                horarios = EmployeeShift.objects.all().order_by('id')
             return render(request, self.template_name, {'horarios':horarios})
         except:
             return render(request, self.template_name)
 
-# Clase para agregar los horarios
-class horario_agregar(View):
+
+class horario_agregar(LoginRequiredMixin, View):
     template_name = 'horario/horario_agregar.html'
 
     def get(self, request, *args, **kwargs):
         try:
+            if not group_required(request.user, ['Administrador'], request, True):
+                return HttpResponseRedirect(reverse('index'))
             employees = Employee.objects.all()
             return render(request, self.template_name, {'employees':employees})
         except:
             return render(request, self.template_name)    
     
     def post(self, request, *args, **kwargs):
+        if not group_required(request.user, ['Administrador'], request, True):
+            return HttpResponseRedirect(reverse('index'))
         queryset = EmployeeShift.objects.all()
         for e in queryset:
             if e == request.POST['employee']:
@@ -61,12 +69,14 @@ class horario_agregar(View):
                     return render(request, self.template_name)
         return render(request, self.template_name)
 
-# Clase para modificar los horarios
-class horario_actualizar(View):
+
+class horario_actualizar(LoginRequiredMixin, View):
     template_name = 'horario/horario_actualizar.html'
 
     def get(self, request, id):
         try:
+            if not group_required(request.user, ['Administrador'], request, True):
+                return HttpResponseRedirect(reverse('index'))
             horarios = get_object_or_404(EmployeeShift, id=id)
         except Employee.DoesNotExist:
             return HttpResponseRedirect(reverse('listar_horarios'))
@@ -74,6 +84,8 @@ class horario_actualizar(View):
 
     def post(self, request, *args, **kwargs):
         try:
+            if not group_required(request.user, ['Administrador'], request, True):
+                return HttpResponseRedirect(reverse('index'))
             employee_id = int(request.POST['employee_id'])
             shift_id = request.POST['id']
             date_reg = request.POST['date_reg'] # fecha
@@ -103,14 +115,13 @@ class horario_actualizar(View):
             return HttpResponseRedirect(reverse('listar_horarios'))
 
 
-
-# Clase para eliminar los horarios
-# @user_passes_test(es_administrador)
-class horario_eliminar(View):
+class horario_eliminar(LoginRequiredMixin, View):
     template_name = 'horario/horario_eliminar.html'
 
     def get(self, request, id):
         try:
+            if not group_required(request.user, ['Administrador'], request, True):
+                return HttpResponseRedirect(reverse('index'))
             horarios = get_object_or_404(EmployeeShift, id=id)
         except EmployeeShift.DoesNotExist:
             return HttpResponseRedirect(reverse('listar_horarios'))
@@ -118,6 +129,8 @@ class horario_eliminar(View):
 
     def post(self, request, *args, **kwargs):
         try:
+            if not group_required(request.user, ['Administrador'], request, True):
+                return HttpResponseRedirect(reverse('index'))
             id = request.POST['id']
             
             horarios = get_object_or_404(EmployeeShift, id=id)
@@ -128,4 +141,3 @@ class horario_eliminar(View):
         except Exception as e:
             messages.warning(request, f'El nuevo horario no se pudo eliminar {e}')
             return HttpResponseRedirect(reverse('listar_horarios'))
-
