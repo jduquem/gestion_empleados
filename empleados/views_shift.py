@@ -9,7 +9,7 @@ from .utils import is_holiday, shift_hours, shift_money, shift_validations
 from .views import group_required
 
 
-class listar_horarios(LoginRequiredMixin, View):
+class ShiftList(LoginRequiredMixin, View):
     template_name = 'horario/horario.html'
 
     def get(self, request, *args, **kwargs):
@@ -17,7 +17,7 @@ class listar_horarios(LoginRequiredMixin, View):
             if not group_required(request.user, ['Administrador', 'Empleado'], request, True):
                 return HttpResponseRedirect(reverse('index'))
             if not group_required(request.user, ['Administrador'], request):
-                horarios = EmployeeShift.objects.filter(employee_id=Employee.objects.get(user=request.user.id).employee_id)
+                horarios = EmployeeShift.objects.filter(employee_id=Employee.objects.get(user=request.user.id).employee_id).order_by('id')
             else:    
                 horarios = EmployeeShift.objects.all().order_by('id')
             return render(request, self.template_name, {'horarios':horarios})
@@ -25,7 +25,7 @@ class listar_horarios(LoginRequiredMixin, View):
             return render(request, self.template_name)
 
 
-class horario_agregar(LoginRequiredMixin, View):
+class ShiftAdd(LoginRequiredMixin, View):
     template_name = 'horario/horario_agregar.html'
 
     def get(self, request, *args, **kwargs):
@@ -70,7 +70,7 @@ class horario_agregar(LoginRequiredMixin, View):
         return render(request, self.template_name)
 
 
-class horario_actualizar(LoginRequiredMixin, View):
+class ShiftUpdate(LoginRequiredMixin, View):
     template_name = 'horario/horario_actualizar.html'
 
     def get(self, request, id):
@@ -115,7 +115,7 @@ class horario_actualizar(LoginRequiredMixin, View):
             return HttpResponseRedirect(reverse('listar_horarios'))
 
 
-class horario_eliminar(LoginRequiredMixin, View):
+class ShiftDelete(LoginRequiredMixin, View):
     template_name = 'horario/horario_eliminar.html'
 
     def get(self, request, id):

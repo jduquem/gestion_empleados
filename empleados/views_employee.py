@@ -8,7 +8,7 @@ from .models import Employee
 from .views import group_required
 
 
-class listar_empleados(LoginRequiredMixin, View):
+class EmployeeList(LoginRequiredMixin, View):
     template_name = 'empleado/empleado.html'
 
     def get(self, request, *args, **kwargs):
@@ -25,7 +25,7 @@ class listar_empleados(LoginRequiredMixin, View):
             return render(request, self.template_name)
 
 
-class empleado_agregar(LoginRequiredMixin, View):
+class EmployeeAdd(LoginRequiredMixin, View):
     template_name = 'empleado/empleado_agregar.html'
 
     def get(self, request, *args, **kwargs):
@@ -84,7 +84,7 @@ class empleado_agregar(LoginRequiredMixin, View):
             return render(request, self.template_name)
 
 
-class empleado_actualizar(LoginRequiredMixin, View):
+class EmployeeUpdate(LoginRequiredMixin, View):
     template_name = 'empleado/empleado_actualizar.html'
     def get(self, request, employee_id):
         try:
@@ -120,7 +120,7 @@ class empleado_actualizar(LoginRequiredMixin, View):
             return HttpResponseRedirect(reverse('listar_empleados'))
 
 
-class empleado_eliminar(LoginRequiredMixin, View):
+class EmployeeDelete(LoginRequiredMixin, View):
     template_name = 'empleado/empleado_eliminar.html'
 
     def get(self, request, employee_id):
