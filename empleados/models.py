@@ -23,7 +23,7 @@ class EmployeeShift(models.Model):
     departure_time = models.TimeField(verbose_name='Hora salida')
     holiday = models.BooleanField(verbose_name='Feriado', default=False)
     total_hours = models.FloatField(verbose_name='Total horas', default=0)
-    valor_hours = models.FloatField(verbose_name='Total horas', default=0)
+    valor_hours = models.FloatField(verbose_name='Valor horas', default=0)
 
     def __str__(self):
         return f"{self.employee} - {self.date_reg}"
