@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.views import View
 from datetime import datetime
-from .utils import is_holiday, shift_hours, shift_money
+from .utils import is_holiday, shift_hours, shift_money, shift_validations
 
 from django.db.models import Q
 
@@ -44,24 +44,8 @@ class horario_agregar(View):
                     entry_time_str = request.POST['entry_time']
                     departure_time_str = request.POST['departure_time']
 
-                    # # Comprobar si ya existe un horario para el mismo empleado en la misma fecha
-                    # existing_horario = EmployeeShift.objects.filter(employee_id=employee_id, date_reg=date_reg).first()
-                    # if existing_horario:
-                    #     messages.warning(request, 'El horario para el empleado {} en la fecha {} ya se encuentra creado'.format(employee_id, date_reg))
-                    #     return render(request, self.template_name)
-
-                    # Comprobar si el nuevo horario se cruza con horarios existentes
-
-                    horarios_Cruzados = EmployeeShift.objects.filter(
-                        Q(employee_id=employee_id, date_reg=date_reg) &
-                        (
-                            Q(entry_time__lte=entry_time_str, departure_time__gte=entry_time_str) |
-                            Q(entry_time__lte=departure_time_str, departure_time__gte=departure_time_str)
-                        )
-                    )
-
-                    if horarios_Cruzados.exists():
-                        print(f'el horario {horarios_Cruzados} ya existe')
+                    if shift_validations(employee_id, EmployeeShift, date_reg, entry_time_str, departure_time_str ):
+                        print('el horario ya existe')
                         messages.warning(request, 'El nuevo horario se cruza con otros horarios existentes para el mismo empleado en la misma fecha')
                         return render(request, self.template_name)
                     empleado = Employee.objects.get(employee_id = employee_id)
@@ -90,27 +74,33 @@ class horario_actualizar(View):
 
     def post(self, request, *args, **kwargs):
         try:
-            id = request.POST['id']
+            employee_id = int(request.POST['employee_id'])
+            shift_id = request.POST['id']
             date_reg = request.POST['date_reg'] # fecha
             entry_time_str = request.POST['entry_time'] 
             departure_time_str = request.POST['departure_time']
+            if shift_validations(employee_id, EmployeeShift, date_reg, entry_time_str, departure_time_str ):
+                print('el horario ya existe')
+                messages.warning(request, 'El nuevo horario se cruza con otros horarios existentes para el mismo empleado en la misma fecha')
+                return HttpResponseRedirect(reverse('listar_horarios'))
             entry_time = datetime.strptime(entry_time_str, '%H:%M')
             departure_time = datetime.strptime(departure_time_str, '%H:%M')
             time_difference = departure_time - entry_time
             total_hours = time_difference.total_seconds() / 3600
             holiday = is_holiday(date_reg)
             
-            horarios = get_object_or_404(EmployeeShift, id=id)
+            horarios = get_object_or_404(EmployeeShift, id=shift_id)
             horarios.date_reg = date_reg
             horarios.entry_time= entry_time
             horarios.departure_time= departure_time
             horarios.total_hours=total_hours
             horarios.holiday=holiday
             horarios.save()
+            messages.success(request, 'Se modifico el horario para el empleado')
             return HttpResponseRedirect(reverse('listar_horarios'))
         except Exception as e:
-            print(e)
-            return render(request, self.template_name)
+            messages.warning(request, f'No se realizo la modificación {e}')
+            return HttpResponseRedirect(reverse('listar_horarios'))
 
 
 

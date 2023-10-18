@@ -1,13 +1,24 @@
 {% extends "../base.html" %}
 {% block body %}
-    <h2>Gráfico de Salario Promedio de Empleados</h2>
+    <h2>Gráficos</h2>
     <div>
-        <canvas id="employeeSalaryChart" width="400" height="400"></canvas>
+        <canvas id="employeeSalaryChart" width="50" height="50"></canvas>
     </div>
-    <label for="" id="average_salary">{{ average_salary }}</label>
+
+    <div>
+        <canvas id="salaryTotalByMonthChart" width="400" height="200"></canvas>
+    </div>
+
+
+    <label for="" id="average_salary" hidden>{{ average_salary }}</label>
+
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    
+        
     <script>
-        var ctx = document.getElementById('employeeSalaryChart').getContext('2d');
+        var ctx = document.getElementById('salaryTotalByMonthChart').getContext('2d');
         var averageSalary = parseFloat(document.getElementById('average_salary').textContent);
         
         var chart = new Chart(ctx, {
@@ -30,5 +41,41 @@
                 }
             }
         });
+        console.log("Script ejecutado");
+    var labels = JSON.parse('{{ labels|safe }}');
+    var data = JSON.parse('{{ data|safe }}');
+    
+    console.log("Labels:", labels);
+    console.log("Data:", data);
+
+
+    var labels = JSON.parse('{{ labels|safe }}');
+    var data = JSON.parse('{{ data|safe }}');
+
+    var ctx = document.getElementById('salaryTotalByMonthChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Salario Total',
+                data: data,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
     </script>
+
+
+
+
 {% endblock %}

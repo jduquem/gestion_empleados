@@ -10,13 +10,16 @@
             <div class="card-body">
                 <form action="{% url 'horario_actualizar' horarios.id %}" method="POST">{% csrf_token %}
                     <div class="form-group">
+                        <input type="text" id="employee_id" name="employee_id" value="{{horarios.employee.employee_id}}" class="form-control" hidden required>
+                    </div>
+                    <div class="form-group">
                         <input type="text" id="name" name="name" value="{{horarios.employee.name}}" class="form-control" readonly required>
                     </div>
                     <div class="form-group">
-                        <input type="number" id="id" name="id" value="{{ horarios.id}}" class="form-control" hidden required>
+                        <input type="number" id="id" name="id" value="{{horarios.id}}" class="form-control" hidden required>
                     </div>
                     <div class="form-group">
-                        <input type="date" id="date_reg" name="date_reg"  value="{{horarios.date_reg}}" class="form-control" required>
+                        <input type="date" id="date_reg" name="date_reg"  value= '{{horarios.date_reg|date:"Y-m-d"}}' class="form-control" required>
                     </div>
                     <div class="form-group">
                         <input type="time" id="entry_time" name="entry_time" value="{{horarios.entry_time}}" class="form-control" value="1" required>
