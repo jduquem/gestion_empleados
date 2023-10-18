@@ -24,7 +24,7 @@
                         <td><a href="{% url 'listar_horarios'  %}" class="btn btn-info">Horarios</a></td>
                     {% endif %}
                     <td><a href="{% url 'nominee_salary_details'  %}" class="btn btn-info">Nómina</a></td>
-                    <td><a href="{% url 'nominee_salary_average'  %}" class="btn btn-info">Reporte</a></td>
+                    <td><a href="{% url 'chart'  %}" class="btn btn-info">Reporte</a></td>
                     <td><a href="{% url 'logout'  %}" class="btn btn-info">{{request.user.username}} Cerrar sesión</a></td>
                 {% else %}
                     <td><a href="{% url 'login'  %}" class="btn btn-info">Iniciar sesión</a></td>

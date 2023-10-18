@@ -1,0 +1,67 @@
+{% extends "../base.html" %}
+{% block body %}
+    <h2>Gráficos</h2>
+    <!-- <canvas id="average_salary" width="400" height="400"></canvas> -->
+    <div class="row">
+        <div class="col-md-6 col-lg-4 col-xl-3">
+            <div class="inner-div">
+                <canvas id="salaryTotalByMonthChart" width="400" height="200"></canvas>
+                <label for="" id="average_salary" hidden>{{ average_salary }}</label>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-xl-3">
+            <div class="inner-div">2</div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-xl-3">
+            <div class="inner-div">3</div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-xl-3">
+            <div class="inner-div">4</div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-xl-3">
+            <div class="inner-div">5</div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-xl-3">
+            <div class="inner-div">6</div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-xl-3">
+            <div class="inner-div">7</div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-xl-3">
+            <div class="inner-div">8</div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-xl-3">
+            <div class="inner-div">9</div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-xl-3">
+            <div class="inner-div">10</div>
+        </div>
+    </div>
+<script>
+    fetch('/nominee_salary_average/')
+            .then(response => response.json())
+            .then(data => {
+                var ctx = document.getElementById('myChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Chart Data',
+                            data: data.data,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+</script>
+{% endblock %}

@@ -14,22 +14,7 @@ import json
 class Index(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'index.html')
-### Clase para enviar informacion para el grafico
-# @user_passes_test(es_administrador)
-class NomineeSalaryAverage(View):
-    template_name = 'nomina/NomineeSalaryAverage.html'
-
-    def get(self, request, *args, **kwargs):
-        try:
-            average_salary = Employee.objects.aggregate(avg_salary=Avg('salary'))['avg_salary']
-            if average_salary is None:
-                average_salary = 0
-            data = {'average_salary': average_salary}
-            print(data)
-            return render(request, self.template_name, {'average_salary':average_salary})
-        except:
-            return render(request, self.template_name)
-
+    
 
 class NomineeSalaryDetails(View):
     template_name = 'nomina/NomineeSalaryDetails.html'
@@ -40,6 +25,54 @@ class NomineeSalaryDetails(View):
             return render(request, self.template_name, {'horarios':horarios})
         except:
             return render(request, self.template_name)
+           
+### Clase para enviar informacion para el grafico
+# @user_passes_test(es_administrador)
+
+
+        
+
+class Chart(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'nomina/chart.html')
+
+def NomineeSalaryAverage(request):
+    numbers = [1, 2, 3]
+    data = [3, 7, 9, 1, 5]  # Sample data for the chart
+    labels = ['Label A', 'Label B', 'Label C', 'Label D', 'Label E']
+    chart_data = {
+        'labels': labels,
+        'data': data,
+    }
+    return json.dumps(chart_data)
+    # return JsonResponse(chart_data, safe=False)
+
+# class NomineeSalaryAverage(View):
+#     template_name = 'nomina/NomineeSalaryAverage.html'
+
+#     def get(self, request, *args, **kwargs):
+#         try:
+#             average_salary_per_gender = Employee.objects.values('gender').annotate(average_salary=Avg('salary'))
+#             result = list(average_salary_per_gender)
+
+#             return render(request, self.template_name, {'result':result, 'gender':('femenino', 'masculino', 'Otro')})
+#             # Output the results
+#             for entry in average_salary_per_gender:
+#                 gender = entry['gender']
+#                 average_salary = entry['average_salary']
+#                 print(f"Gender: {gender}, Average Salary: {average_salary}")
+#             average_salary = Employee.objects.aggregate(avg_salary=Avg('salary'))['avg_salary']
+
+#             if average_salary is None:
+#                 average_salary = 0
+#             data = {'average_salary': average_salary}
+#             print(data)
+#             return render(request, self.template_name, {'average_salary':average_salary})
+#         except:
+#             return render(request, self.template_name)
+
+
+
         
     # def iniciar_sesion(request):
     #     if request.method == 'POST':
@@ -54,31 +87,31 @@ class NomineeSalaryDetails(View):
         
     #     return render(request, 'login.html', {'form': form})
 
-def es_administrador(user):
-    return user.groups.filter(name='Administradores').exists()
+# def es_administrador(user):
+#     return user.groups.filter(name='Administradores').exists()
 
 
-class SalaryTotalByMonth(View):
-    template_name = 'nomina/NomineeSalaryAverage.html'
+# class SalaryTotalByMonth(View):
+#     template_name = 'nomina/NomineeSalaryAverage.html'
 
-    def get(self, request, *args, **kwargs):
-        try:
-            # Obtener datos del salario total por mes
-            monthly_salary_data = EmployeeShift.objects.annotate(
-                month=TruncMonth('date_reg')
-            ).values('month').annotate(
-                total_salary=Sum('employee__salary')
-            ).order_by('month')
+#     def get(self, request, *args, **kwargs):
+#         try:
+#             # Obtener datos del salario total por mes
+#             monthly_salary_data = EmployeeShift.objects.annotate(
+#                 month=TruncMonth('date_reg')
+#             ).values('month').annotate(
+#                 total_salary=Sum('employee__salary')
+#             ).order_by('month')
 
-            labels = [item['month'].strftime('%B %Y') for item in monthly_salary_data]
-            data = [item['total_salary'] for item in monthly_salary_data]
-            import pdb; pdb.set_trace()
-            print(labels)
-            print(data)
+#             labels = [item['month'].strftime('%B %Y') for item in monthly_salary_data]
+#             data = [item['total_salary'] for item in monthly_salary_data]
+#             import pdb; pdb.set_trace()
+#             print(labels)
+#             print(data)
 
-            return render(request, self.template_name, {'labels': json.dumps(labels), 'data': json.dumps(data)})
-        except:
-            return render(request, self.template_name)
+#             return render(request, self.template_name, {'labels': json.dumps(labels), 'data': json.dumps(data)})
+#         except:
+#             return render(request, self.template_name)
         
         
 

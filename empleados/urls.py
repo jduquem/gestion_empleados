@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views_employee as employee 
 from . import views_shift as shift
-from .views import Index, NomineeSalaryAverage, NomineeSalaryDetails
+from .views import Index, NomineeSalaryAverage, NomineeSalaryDetails, Chart
 
 urlpatterns = [
    
@@ -22,9 +22,9 @@ urlpatterns = [
 
 
       # reporte
-    path('nominee_salary_average/', NomineeSalaryAverage.as_view(), name='nominee_salary_average'),
+    path('chart/', Chart.as_view(), name='chart'),
     path('nominee_salary_details/', NomineeSalaryDetails.as_view(), name='nominee_salary_details'),
-
+    path('nominee_salary_average/', NomineeSalaryAverage, name='nominee_salary_average'), 
     
       # login
     path('login/', auth_views.LoginView.as_view(), name='login'),
