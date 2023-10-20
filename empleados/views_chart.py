@@ -35,7 +35,7 @@ class SalaryAverageByGender(View):
         return render(request, 'nomina/chart.html', context)
     
 class SalaryTotalByMonth(View):
-    template_name = 'tu_template.html'
+    template_name = 'nomina/chart.html'
 
     def get(self, request, *args, **kwargs):
         monthly_salary_data = EmployeeShift.objects.annotate(
@@ -54,7 +54,7 @@ class SalaryTotalByMonth(View):
         return render(request, self.template_name, context)
 
 class EmployeesByMonth(View):
-    template_name = 'nomina/employees_by_month.html'
+    template_name = 'nomina/chart.html'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -75,7 +75,7 @@ class EmployeesByMonth(View):
 
 
 class TotalSalary(View):
-    template_name = 'tu_template.html'
+    template_name = 'nomina/chart.html'
 
     def get(self, request, *args, **kwargs):
         total_salary = Employee.objects.aggregate(total_salary=Sum('salary'))['total_salary']
@@ -88,7 +88,7 @@ class TotalSalary(View):
     
 
 class AverageHoursByMonth(View):
-    template_name = 'nomina/average_hours_by_month.html'
+    template_name = 'nomina/chart.html'
 
     def get(self, request, *args, **kwargs):
         try:
