@@ -1,46 +1,74 @@
 {% extends "../base.html" %}
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% block title %}Informe de Nónima{% endblock %}
 
 {% block body %}
     <h2>Gráficos</h2>
+    <style>
+        .chart-container {
+            width: 25%; /* Divide el ancho en 4 para acomodar 4 gráficos en una fila */
+            display: inline-block;
+            padding: 10px;
+        }
+    </style>
     <!-- <canvas id="average_salary" width="400" height="400"></canvas> -->
     {{data}}
-    <div class="row">
-        <div class="col-md-6 col-lg-4 col-xl-3">
+    {{ average_salary }}
+    {{ genders }}
+    {{context.male_average_salary}}
+    <!-- <div class="row">
+        <div class="col-md-6 col-lg-2 col-xl-2">
             <div class="inner-div">
                 <canvas id="salaryTotalByMonthChart" width="400" height="200"></canvas>
                 <label for="" id="average_salary" hidden>{{ average_salary }}</label>
             </div>
         </div>
-        <div class="col-md-6 col-lg-4 col-xl-3">
-            <div class="inner-div">2</div>
+        <div class="col-md-6 col-lg-2 col-xl-2">
+            <div class="inner-div">
+                <canvas id="salaryAverageByGenderChart" width="400" height="200"></canvas>
+            </div>
+            </div>
         </div>
-        <div class="col-md-6 col-lg-4 col-xl-3">
-            <div class="inner-div">3</div>
+        <div class="col-md-6 col-lg-2 col-xl-2">
+            <div class="inner-div">
+                <canvas id="salaryTotalByMonthChart" width="400" height="200"></canvas>
+            </div>
         </div>
-        <div class="col-md-6 col-lg-4 col-xl-3">
-            <div class="inner-div">4</div>
+        <div class="col-md-6 col-lg-2 col-xl-2">
+            <div class="inner-div">
+                <canvas id="averageHoursChart" width="400" height="200"></canvas>
+            </div>
         </div>
-        <div class="col-md-6 col-lg-4 col-xl-3">
-            <div class="inner-div">5</div>
+        <div class="col-md-6 col-lg-2 col-xl-2">
+            <div class="inner-div">
+                <canvas id="employeesByMonthChart" width="400" height="200"></canvas>
+            </div>
         </div>
-        <div class="col-md-6 col-lg-4 col-xl-3">
-            <div class="inner-div">6</div>
-        </div>
-        <div class="col-md-6 col-lg-4 col-xl-3">
-            <div class="inner-div">7</div>
-        </div>
-        <div class="col-md-6 col-lg-4 col-xl-3">
-            <div class="inner-div">8</div>
-        </div>
-        <div class="col-md-6 col-lg-4 col-xl-3">
-            <div class="inner-div">9</div>
-        </div>
-        <div class="col-md-6 col-lg-4 col-xl-3">
-            <div class="inner-div">10</div>
-        </div>
+    </div> -->
+
+<div class="chart-container">
+        <canvas id="salaryAverageByGenderChart" width="400" height="200"></canvas>
     </div>
+
+    <div class="chart-container">
+        <canvas id="salaryTotalByMonthChart" width="400" height="200"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="averageHoursChart" width="400" height="200"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="employeesByMonthChart" width="400" height="200"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="employeesByMonthChart2" width="400" height="200"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="employeesByMonthChart3" width="400" height="200"></canvas>
+    </div>
+
+    
 <script>
     fetch('/nominee_salary_average/')
             .then(response => response.json())
@@ -67,5 +95,166 @@
                     }
                 });
             });
+
+
+            var ctx = document.getElementById('salaryAverageByGenderChart').getContext('2d');
+
+// Puedes acceder directamente a las variables que has pasado desde la vista
+// var genders = {{ genders|safe }};
+// var average_salaries = {{ average_salaries|safe }};
+
+    var chart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Masculino', 'Femenino', 'Otro'],
+    datasets: [{
+      label: 'Salario Promedio',
+      data: ['3500','5500', '4500'],
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});
+
+var ctx = document.getElementById('salaryTotalByMonthChart').getContext('2d');
+    // var labels = {{ labels|safe }};
+    // var data = {{ data|safe }};
+
+    var chart = new Chart(ctx, {
+      type: 'polarArea',
+      data: {
+        labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+        datasets: [{
+          label: 'Salario Total',
+          data: [150000, 700000, 640000, 820000, 950000],
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+
+
+
+    var ctx = document.getElementById('averageHoursChart').getContext('2d');
+        // var labels = {{ labels|safe }};
+        // var data = {{ data|safe }};
+
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+                datasets: [{
+                    label: 'Promedio de Horas',
+                    data: [5, 70, 40, 82, 45],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+
+
+        var ctx = document.getElementById('employeesByMonthChart').getContext('2d');
+        // var labels = {{ labels|safe }};
+        // var data = {{ data|safe }};
+
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels:  ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+                datasets: [{
+                    label: 'Cantidad de Empleados',
+                    data: [5, 70, 40, 82, 45],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+        var ctx = document.getElementById('employeesByMonthChart2').getContext('2d');
+        // var labels = {{ labels|safe }};
+        // var data = {{ data|safe }};
+
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels:  ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+                datasets: [{
+                    label: 'Cantidad de Empleados',
+                    data: [5, 70, 40, 82, 45],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+        var ctx = document.getElementById('employeesByMonthChart3').getContext('2d');
+        // var labels = {{ labels|safe }};
+        // var data = {{ data|safe }};
+
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels:  ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+                datasets: [{
+                    label: 'Cantidad de Empleados',
+                    data: [5, 70, 40, 82, 45],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
 </script>
 {% endblock %}
