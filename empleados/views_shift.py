@@ -22,14 +22,14 @@ class ShiftList(LoginRequiredMixin, View):
             else:    
                 horarios = EmployeeShift.objects.all().order_by('id')
                 # populate_shift.populate_shifts(3)
-            for horario in horarios[:10]:
-                entry_time = horario.entry_time
-                departure_time = horario.departure_time
-                horario.entry_time  = departure_time
-                horario.departure_time = entry_time
-                horario.holiday = is_holiday(str(horario.date_reg))
-                horario.save()
-            arreglo()
+            # for horario in horarios[:10]:
+            #     entry_time = horario.entry_time
+            #     departure_time = horario.departure_time
+            #     horario.entry_time  = departure_time
+            #     horario.departure_time = entry_time
+            #     horario.holiday = is_holiday(str(horario.date_reg))
+            #     horario.save()
+            # arreglo()
             return render(request, self.template_name, {'horarios':horarios})
         except Exception as e:
             print(e)
