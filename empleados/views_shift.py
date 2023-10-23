@@ -140,7 +140,8 @@ class ShiftDelete(LoginRequiredMixin, View):
             id = request.POST['id']
             
             horarios = get_object_or_404(EmployeeShift, id=id)
-            horarios.delete()
+            horarios.is_deleted=True
+            horarios.save()
             messages.success(request, 'El horario se elimino correctamente')
             
             return HttpResponseRedirect(reverse('listar_horarios'))

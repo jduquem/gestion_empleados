@@ -138,7 +138,8 @@ class EmployeeDelete(LoginRequiredMixin, View):
                 return HttpResponseRedirect(reverse('index'))
             employee_id = request.POST['employee_id']
             employee = get_object_or_404(Employee, employee_id=employee_id)
-            employee.delete()
+            employee.is_deleted=True
+            employee.save()
             messages.success(request, 'Se ha eliminado el empleado con cédula {}'.format(employee.identification))
             return HttpResponseRedirect(reverse('listar_empleados'))
         except Exception as e:
