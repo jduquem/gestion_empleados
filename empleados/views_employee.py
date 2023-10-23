@@ -20,7 +20,7 @@ class EmployeeList(LoginRequiredMixin, View):
                 empleados = Employee.objects.filter(user=request.user.id)
             else:    
                 empleados = Employee.objects.all().order_by('employee_id')
-                populate_employees(2)
+                # populate_employees.populate_employees(10)
             return render(request, self.template_name, {'empleados':empleados})
         except Exception as e:
             print(f"Se ha producido un error: {e}")

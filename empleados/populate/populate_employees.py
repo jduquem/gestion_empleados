@@ -11,7 +11,7 @@ def populate_employees(cant):
             name = fake.name()
             gender = fake.random_element(elements=('M', 'F', 'O'))
             email = fake.email()
-            numberphone = fake.phone_number()
+            numberphone = fake.random_int(min=3000000000, max=3190000000)
             salary = fake.random_int(min=1000000, max=10000000)  # Random salary between 20,000 and 1,000,000
             city = fake.city()
 

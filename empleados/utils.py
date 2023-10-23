@@ -90,8 +90,8 @@ def arreglo():
     try:
         for shift in shifts:
             print(shift.holiday)
-            print(shift.employee.salary)
-            print(shift.total_hours)
+            # print(shift.employee.salary)
+            # print(shift.total_hours)
             start_datetime = datetime.combine(datetime.today(), shift.entry_time)
             end_datetime = datetime.combine(datetime.today(), shift.departure_time)
 

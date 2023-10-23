@@ -7,8 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
 from .utils import is_holiday, shift_hours, shift_money, shift_validations, arreglo, shift_validations_2
 from .views import group_required
-
-
+from .populate import populate_shift
+from datetime import date
 
 class ShiftList(LoginRequiredMixin, View):
     template_name = 'horario/horario.html'
@@ -21,16 +21,18 @@ class ShiftList(LoginRequiredMixin, View):
                 horarios = EmployeeShift.objects.filter(employee_id=Employee.objects.get(user=request.user.id).employee_id).order_by('id')
             else:    
                 horarios = EmployeeShift.objects.all().order_by('id')
-            # for horario in horarios:
-            #     if horario.entry_time>=horario.departure_time:
-            #         entry_time = horario.entry_time
-            #         departure_time = horario.departure_time
-            #         horario.entry_time  = departure_time
-            #         horario.departure_time = entry_time
-            #         horario.save()
-            # arreglo()
+                # populate_shift.populate_shifts(3)
+            for horario in horarios[:10]:
+                entry_time = horario.entry_time
+                departure_time = horario.departure_time
+                horario.entry_time  = departure_time
+                horario.departure_time = entry_time
+                horario.holiday = is_holiday(str(horario.date_reg))
+                horario.save()
+            arreglo()
             return render(request, self.template_name, {'horarios':horarios})
-        except:
+        except Exception as e:
+            print(e)
             return render(request, self.template_name)
 
 
