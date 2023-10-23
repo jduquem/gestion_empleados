@@ -51,7 +51,13 @@ class ShiftAdd(LoginRequiredMixin, View):
                     date_reg = request.POST['date_reg']
                     entry_time_str = request.POST['entry_time']
                     departure_time_str = request.POST['departure_time']
-
+                    entry_time = datetime.strptime(entry_time_str, '%H:%M').time()
+                    departure_time = datetime.strptime(departure_time_str, '%H:%M').time()
+                    
+                    if departure_time < entry_time:
+                        messages.warning(request, f'La hora de salida es menor que la hora de entrada: hora inicio {entry_time} hora de salida {departure_time}')
+                        return render(request, self.template_name)
+                    
                     if shift_validations(employee_id, EmployeeShift, date_reg, entry_time_str, departure_time_str ):
                         print('el horario ya existe')
                         messages.warning(request, 'El nuevo horario se cruza con otros horarios existentes para el mismo empleado en la misma fecha')

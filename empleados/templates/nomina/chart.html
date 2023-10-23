@@ -11,7 +11,6 @@
             padding: 10px;
         }
     </style>
-
 <div class="chart-container">
         <canvas id="salaryAverageByGenderChart" width="400" height="200"></canvas>
         <label for="" id="context.genders" hidden>{{context.genders}}</label>
@@ -46,16 +45,21 @@
 var ctx = document.getElementById('salaryAverageByGenderChart').getContext('2d');
 
 // Puedes acceder directamente a las variables que has pasado desde la vista
-var genders = document.getElementById('context.genders').textContent;
-var average_salaries = document.getElementById('context.average_salaries').textContent;
+// var genders = document.getElementById('context.genders').textContent;
+// var average_salaries = document.getElementById('context.average_salaries').textContent;
+
+var genderSet = new Set(document.getElementById('context.genders').textContent);
+var genderList = Array.from(genderSet);
+var average_salariesset = document.getElementById('context.average_salaries').textContent
+var average_salarieslist = Array.from(average_salariesset);
 
     var chart = new Chart(ctx, {
-  type: 'bar',
+  type: 'line',
   data: {
-    labels: genders,
+    labels: genderList,
     datasets: [{
       label: 'Salario Promedio por genero',
-      data: average_salaries,
+      data: average_salarieslist,
       backgroundColor: 'rgba(75, 192, 192, 0.2)',
       borderColor: 'rgba(75, 192, 192, 1)',
       borderWidth: 1
@@ -75,7 +79,7 @@ var campos = document.getElementById('campos').textContent;
 var valor = document.getElementById('valor').textContent;
 
     var chart = new Chart(ctx, {
-      type: 'bar',
+      type: 'line',
       data: {
         labels: campos,
         datasets: [{
@@ -130,12 +134,12 @@ var valor = document.getElementById('valor').textContent;
         var total_salary = document.getElementById('total_salary').textContent;
 
         var chart = new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels:  ['Salario total'],
                 datasets: [{
-                    label: total_salary,
-                    data: [5, 70, 40, 82, 45],
+                    label: 'Salario Total',
+                    data: total_salary,
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1
@@ -153,7 +157,7 @@ var valor = document.getElementById('valor').textContent;
 
         var ctx = document.getElementById('AverageHoursByMonth').getContext('2d');
         var labels = document.getElementById('labels').textContent;
-        var data = document.getElementById('data').textContent;
+        var data1 = document.getElementById('data').textContent;
 
         var chart = new Chart(ctx, {
             type: 'bar',
@@ -161,7 +165,7 @@ var valor = document.getElementById('valor').textContent;
                 labels:  labels,
                 datasets: [{
                     label: 'Promedio de horas por mes',
-                    data: data,
+                    data: data1,
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1
