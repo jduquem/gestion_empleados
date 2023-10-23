@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
-from .utils import is_holiday, shift_hours, shift_money, shift_validations
+from .utils import is_holiday, shift_hours, shift_money, shift_validations, arreglo
 from .views import group_required
 
 
@@ -20,6 +20,14 @@ class ShiftList(LoginRequiredMixin, View):
                 horarios = EmployeeShift.objects.filter(employee_id=Employee.objects.get(user=request.user.id).employee_id).order_by('id')
             else:    
                 horarios = EmployeeShift.objects.all().order_by('id')
+            # for horario in horarios:
+            #     if horario.entry_time>=horario.departure_time:
+            #         entry_time = horario.entry_time
+            #         departure_time = horario.departure_time
+            #         horario.entry_time  = departure_time
+            #         horario.departure_time = entry_time
+            #         horario.save()
+            # arreglo()
             return render(request, self.template_name, {'horarios':horarios})
         except:
             return render(request, self.template_name)

@@ -14,7 +14,6 @@ import json
 def group_required(user, group_names, request, show=False):    
     for group in user.groups.all():
         for group_name in group_names: 
-            print(f'{group.name} vs {group_name}')
             if group.name == group_name:
                 print('granted')
                 return True

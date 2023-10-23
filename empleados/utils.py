@@ -72,16 +72,23 @@ def shift_money(hours, salary, is_holiday):
 
 
 def arreglo():
-    createshift()
+    # createshift()
     shifts = EmployeeShift.objects.all()
+    try:
+        for shift in shifts:
+            print(shift.holiday)
+            print(shift.employee.salary)
+            print(shift.total_hours)
+            start_datetime = datetime.combine(datetime.today(), shift.entry_time)
+            end_datetime = datetime.combine(datetime.today(), shift.departure_time)
 
-    for shift in shifts:
-        print(shift.holiday)
-        print(shift.employee.salary)
-        print(shift.total_hours)
-        shift.valor_hours = shift_money(shift.total_hours, shift.employee.salary, shift.holiday)
-        shift.save()
-
+        # Calculate the duration as timedelta
+            duration = end_datetime - start_datetime
+            shift.total_hours = duration.seconds /3600.0
+            shift.valor_hours = shift_money(shift.total_hours, shift.employee.salary, shift.holiday)
+            shift.save()
+    except Exception as e:
+        print(e)
 def createshift():
     
     shifts = random.randint(1, 10)
