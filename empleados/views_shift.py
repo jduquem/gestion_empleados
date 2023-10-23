@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
-from .utils import is_holiday, shift_hours, shift_money, shift_validations, arreglo
+from .utils import is_holiday, shift_hours, shift_money, shift_validations, arreglo, shift_validations_2
 from .views import group_required
 
 
@@ -105,8 +105,8 @@ class ShiftUpdate(LoginRequiredMixin, View):
             date_reg = request.POST['date_reg'] # fecha
             entry_time_str = request.POST['entry_time'] 
             departure_time_str = request.POST['departure_time']
-            if shift_validations(employee_id, EmployeeShift, date_reg, entry_time_str, departure_time_str ):
-                print('el horario ya existe')
+            if shift_validations_2(employee_id, EmployeeShift, date_reg, entry_time_str, departure_time_str, shift_id):
+                print('el horario se cruza')
                 messages.warning(request, 'El nuevo horario se cruza con otros horarios existentes para el mismo empleado en la misma fecha')
                 return HttpResponseRedirect(reverse('listar_horarios'))
             entry_time = datetime.strptime(entry_time_str, '%H:%M')

@@ -16,7 +16,20 @@ def shift_validations(employee_id, shifts, date_reg, entry_time_str, departure_t
     return horarios_Cruzados.exists()
 
 
+def shift_validations_2(employee_id, shifts, date_reg, entry_time_str, departure_time_str, current_shift_id=None):
+    horarios_Cruzados = shifts.objects.filter(
+        Q(employee_id=employee_id, date_reg=date_reg) &
+        (
+            Q(entry_time__lte=entry_time_str, departure_time__gte=entry_time_str) |
+            Q(entry_time__lte=departure_time_str, departure_time__gte=departure_time_str)
+        )
+    )
 
+    # Exclude the current shift being edited (if provided)
+    if current_shift_id:
+        horarios_Cruzados = horarios_Cruzados.exclude(pk=current_shift_id)
+
+    return horarios_Cruzados.exists()
 
 ### Funcion para revisar feriados incluyendo domingos
 def is_holiday(mydate):
