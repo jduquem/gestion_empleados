@@ -11,11 +11,12 @@ from .utils import arreglo
 import json
 
 
-def group_required(user, group_names, request, show=False):    
+def group_required(user, group_names, request, show=False):
     for group in user.groups.all():
-        for group_name in group_names: 
+        for group_name in group_names:
+            if group_name == 'Empleados': group_name = 'Empleado'
+            if group_name == 'Administradores': group_name = 'Administrador'
             if group.name == group_name:
-                print('granted')
                 return True
     if show:
         messages.warning(request, 'Usuario restringido')
