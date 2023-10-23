@@ -6,19 +6,21 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Employee
 from .views import group_required
-
+from .populate import populate_employees
 
 class EmployeeList(LoginRequiredMixin, View):
     template_name = 'empleado/empleado.html'
 
     def get(self, request, *args, **kwargs):
         try:
+            
             if not group_required(request.user, ['Administrador', 'Empleado'], request, True):
                 return HttpResponseRedirect(reverse('index'))
             if not group_required(request.user, ['Administrador'], request):
                 empleados = Employee.objects.filter(user=request.user.id)
             else:    
                 empleados = Employee.objects.all().order_by('employee_id')
+                populate_employees(2)
             return render(request, self.template_name, {'empleados':empleados})
         except Exception as e:
             print(f"Se ha producido un error: {e}")

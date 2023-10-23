@@ -9,6 +9,7 @@ from .utils import is_holiday, shift_hours, shift_money, shift_validations, arre
 from .views import group_required
 
 
+
 class ShiftList(LoginRequiredMixin, View):
     template_name = 'horario/horario.html'
 
