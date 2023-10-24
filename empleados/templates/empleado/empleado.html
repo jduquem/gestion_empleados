@@ -11,6 +11,7 @@
             <table class="table table-striped table-hover rwd_auto ">
                 <thead>
                     <tr>
+                        <th>Rol del usuario</th>
                         <th>Identificación</th>
                         <th>Nombre</th>
                         <th>Genero</th>
@@ -24,6 +25,7 @@
                 <tbody>
                     {% for empleado in empleados %}
                     <tr>
+                        <td>{% if empleado.user.groups.all.0.name == 'Administradores' %} Administrador {% else %} Empleado {% endif %}</td>
                         <td>{{ empleado.identification }}</td>
                         <td>{{ empleado.name }}</td>
                         <td>{{ empleado.gender }}</td>

@@ -16,7 +16,6 @@ def populate_employees(cant):
             city = fake.city()
 
             user = User.objects.create_user(username=username, email=email, password=username)
-            user.groups.add(Group.objects.get(name='Empleado'))
             user.groups.add(Group.objects.get(name='Empleados'))
             user.save()
 

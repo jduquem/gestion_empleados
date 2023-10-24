@@ -14,8 +14,6 @@ import json
 def group_required(user, group_names, request, show=False):
     for group in user.groups.all():
         for group_name in group_names:
-            if group_name == 'Empleados': group_name = 'Empleado'
-            if group_name == 'Administradores': group_name = 'Administrador'
             if group.name == group_name:
                 return True
     if show:
@@ -30,10 +28,10 @@ class NomineeSalaryDetails(LoginRequiredMixin, View):
     template_name = 'nomina/NomineeSalaryDetails.html'
     
     def get(self, request, *args, **kwargs):
-        if not group_required(request.user, ['Administrador', 'Empleado'], request):
+        if not group_required(request.user, ['Administradores', 'Empleados'], request):
             return HttpResponseRedirect(reverse('index'))
         try:
-            if not group_required(request.user, ['Administrador'], request):
+            if not group_required(request.user, ['Administradores'], request):
                 horarios = EmployeeShift.objects.filter(employee_id=Employee.objects.get(user=request.user.id).employee_id).order_by('id')
             else:    
                 horarios = EmployeeShift.objects.all().order_by('id')

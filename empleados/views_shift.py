@@ -15,9 +15,9 @@ class ShiftList(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         try:
-            if not group_required(request.user, ['Administrador', 'Empleado'], request, True):
+            if not group_required(request.user, ['Administradores', 'Empleados'], request, True):
                 return HttpResponseRedirect(reverse('index'))
-            if not group_required(request.user, ['Administrador'], request):
+            if not group_required(request.user, ['Administradores'], request):
                 horarios = EmployeeShift.objects.filter(employee_id=Employee.objects.get(user=request.user.id).employee_id).order_by('id')
             else:    
                 horarios = EmployeeShift.objects.all().order_by('id')
@@ -41,7 +41,7 @@ class ShiftAdd(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         try:
-            if not group_required(request.user, ['Administrador'], request, True):
+            if not group_required(request.user, ['Administradores'], request, True):
                 return HttpResponseRedirect(reverse('index'))
             employees = Employee.objects.all()
             return render(request, self.template_name, {'employees':employees})
@@ -49,7 +49,7 @@ class ShiftAdd(LoginRequiredMixin, View):
             return render(request, self.template_name)    
     
     def post(self, request, *args, **kwargs):
-        if not group_required(request.user, ['Administrador'], request, True):
+        if not group_required(request.user, ['Administradores'], request, True):
             return HttpResponseRedirect(reverse('index'))
         queryset = EmployeeShift.objects.all()
         for e in queryset:
@@ -92,7 +92,7 @@ class ShiftUpdate(LoginRequiredMixin, View):
 
     def get(self, request, id):
         try:
-            if not group_required(request.user, ['Administrador'], request, True):
+            if not group_required(request.user, ['Administradores'], request, True):
                 return HttpResponseRedirect(reverse('index'))
             horarios = get_object_or_404(EmployeeShift, id=id)
         except Employee.DoesNotExist:
@@ -101,7 +101,7 @@ class ShiftUpdate(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         try:
-            if not group_required(request.user, ['Administrador'], request, True):
+            if not group_required(request.user, ['Administradores'], request, True):
                 return HttpResponseRedirect(reverse('index'))
             employee_id = int(request.POST['employee_id'])
             shift_id = request.POST['id']
@@ -137,7 +137,7 @@ class ShiftDelete(LoginRequiredMixin, View):
 
     def get(self, request, id):
         try:
-            if not group_required(request.user, ['Administrador'], request, True):
+            if not group_required(request.user, ['Administradores'], request, True):
                 return HttpResponseRedirect(reverse('index'))
             horarios = get_object_or_404(EmployeeShift, id=id)
         except EmployeeShift.DoesNotExist:
@@ -146,7 +146,7 @@ class ShiftDelete(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         try:
-            if not group_required(request.user, ['Administrador'], request, True):
+            if not group_required(request.user, ['Administradores'], request, True):
                 return HttpResponseRedirect(reverse('index'))
             id = request.POST['id']
             

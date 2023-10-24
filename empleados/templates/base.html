@@ -19,7 +19,7 @@
                     </button>
                 </div>
                 {% if request.user.is_authenticated %}
-                    {% if request.user.groups.all.0.name == "Administrador" or request.user.groups.all.0.name == "Administradores" %} 
+                    {% if request.user.groups.all.0.name == "Administradores" %} 
                         <td><a href="{% url 'listar_empleados'  %}" class="btn btn-info">Empleados</a></td>
                         <td><a href="{% url 'listar_horarios'  %}" class="btn btn-info">Horarios</a></td>
                     {% endif %}

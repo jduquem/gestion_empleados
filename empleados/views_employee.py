@@ -14,9 +14,9 @@ class EmployeeList(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         try:
             
-            if not group_required(request.user, ['Administrador', 'Empleado'], request, True):
+            if not group_required(request.user, ['Administradores', 'Empleados'], request, True):
                 return HttpResponseRedirect(reverse('index'))
-            if not group_required(request.user, ['Administrador'], request):
+            if not group_required(request.user, ['Administradores'], request):
                 empleados = Employee.objects.filter(user=request.user.id)
             else:    
                 empleados = Employee.objects.all().order_by('employee_id')
@@ -32,7 +32,7 @@ class EmployeeAdd(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         try:
-            if not group_required(request.user, ['Administrador'], request, True):
+            if not group_required(request.user, ['Administradores'], request, True):
                 return HttpResponseRedirect(reverse('index'))
             queryset = Employee.objects.all()
             return render(request, self.template_name, {'queryset':queryset})
@@ -40,7 +40,7 @@ class EmployeeAdd(LoginRequiredMixin, View):
             return render(request, self.template_name)    
     
     def post(self, request, *args, **kwargs):
-        if not group_required(request.user, ['Administrador'], request, True):
+        if not group_required(request.user, ['Administradores'], request, True):
             return HttpResponseRedirect(reverse('index'))
         username = request.POST.get('identification')
         if Employee.objects.filter(identification=username).exists():
@@ -54,10 +54,8 @@ class EmployeeAdd(LoginRequiredMixin, View):
             
             user = User.objects.create_user(username=username, email='email@gmail.com', password=username)
             if request.POST.get('isadmin'):
-                user.groups.add(Group.objects.get(name='Administrador'))
                 user.groups.add(Group.objects.get(name='Administradores'))
             else:
-                user.groups.add(Group.objects.get(name='Empleado'))
                 user.groups.add(Group.objects.get(name='Empleados'))
             user.save()
 
@@ -90,7 +88,7 @@ class EmployeeUpdate(LoginRequiredMixin, View):
     template_name = 'empleado/empleado_actualizar.html'
     def get(self, request, employee_id):
         try:
-            if not group_required(request.user, ['Administrador'], request, True):
+            if not group_required(request.user, ['Administradores'], request, True):
                 return HttpResponseRedirect(reverse('index'))
             employee = get_object_or_404(Employee, employee_id=employee_id)
         except Employee.DoesNotExist:
@@ -99,7 +97,7 @@ class EmployeeUpdate(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         try:
-            if not group_required(request.user, ['Administrador'], request, True):
+            if not group_required(request.user, ['Administradores'], request, True):
                 return HttpResponseRedirect(reverse('index'))
             employee_id = request.POST['employee_id']
             name=request.POST['name']
@@ -127,7 +125,7 @@ class EmployeeDelete(LoginRequiredMixin, View):
 
     def get(self, request, employee_id):
         try:
-            if not group_required(request.user, ['Administrador'], request, True):
+            if not group_required(request.user, ['Administradores'], request, True):
                 return HttpResponseRedirect(reverse('index'))
             employee = get_object_or_404(Employee, employee_id=employee_id)
         except Employee.DoesNotExist:
@@ -136,7 +134,7 @@ class EmployeeDelete(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         try:
-            if not group_required(request.user, ['Administrador'], request, True):
+            if not group_required(request.user, ['Administradores'], request, True):
                 return HttpResponseRedirect(reverse('index'))
             employee_id = request.POST['employee_id']
             employee = get_object_or_404(Employee, employee_id=employee_id)
