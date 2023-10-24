@@ -10,6 +10,8 @@
         <div class="card">
             <div class="card-body">
                 <form action="{% url 'empleado_eliminar' employee.employee_id %}" method="POST">{% csrf_token %}
+                    <input type="number" id="identification" name="identification"
+                    value="{{employee.identification}}" class="form-control" hidden required>
                     <div class="form-group">
                         <input type="text" id="employee_id" name="employee_id" value="{{employee.employee_id}}"
                             class="form-control" hidden required>

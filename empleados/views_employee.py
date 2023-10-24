@@ -137,11 +137,15 @@ class EmployeeDelete(LoginRequiredMixin, View):
             if not group_required(request.user, ['Administradores'], request, True):
                 return HttpResponseRedirect(reverse('index'))
             employee_id = request.POST['employee_id']
+            identification = request.POST['identification']
             employee = get_object_or_404(Employee, employee_id=employee_id)
             employee.is_deleted=True
             employee.save()
+            user = User.objects.get(username = identification)
+            user.is_active = False
+            user.save()
             messages.success(request, 'Se ha eliminado el empleado con cédula {}'.format(employee.identification))
             return HttpResponseRedirect(reverse('listar_empleados'))
         except Exception as e:
-            messages.success(request, 'El empleado no se pudo eliminar')
+            messages.success(request, f'El empleado no se pudo eliminar. .::. Error{e} ')
             return HttpResponseRedirect(reverse('listar_empleados'))
