@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class CustomUser(User):
+    class Meta:
+        ordering = ['id']
+
 class SoftDeletionManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_deleted=False)
@@ -19,8 +23,12 @@ class Employee(models.Model):
 
     objects = SoftDeletionManager()
 
+    class Meta:
+        ordering = ['employee_id']
+
     def __str__(self):
-        return self.identification
+        return f'{self.employee_id} - {self.name} - {self.identification}'
+
 
 class EmployeeShift(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
@@ -32,7 +40,10 @@ class EmployeeShift(models.Model):
     valor_hours = models.FloatField(verbose_name='Valor horas', default=0)
     is_deleted = models.BooleanField(default=False)
 
-    objects = SoftDeletionManager()  # Adding the custom manager
+    objects = SoftDeletionManager()
+
+    class Meta:
+        ordering = ['employee_id']
 
     def __str__(self):
-        return f"{self.employee} - {self.date_reg}"
+        return f"{self.id} - ({self.employee}) - {self.date_reg}"
