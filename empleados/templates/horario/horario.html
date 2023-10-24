@@ -18,6 +18,7 @@
                         <th>Hora de salida</th>
                         <th>Es festivo?</th>
                         <th>Total horas</th>
+                        <th>Valor horas</th>
                         <th colspan="">Opciones</th>
                     </tr>
                 </thead>
@@ -28,10 +29,9 @@
                       <td>{{ horario.date_reg|date:'d/m/Y' }}</td>
                       <td>{{ horario.entry_time }}</td>
                       <td>{{ horario.departure_time }}</td>
-                      <td>{%if horario.holiday == False %} No
-                        {%elif horario.holiday == True %} Si
-                        {%endif%}</td>
+                      <td>{%if horario.holiday == False %}No{%elif horario.holiday == True %}Si{%endif%}</td>
                       <td>{{ horario.total_hours|floatformat:'2' }}</td>
+                      <td>$ {{ horario.valor_hours|floatformat:2 }}</td>
                       <td><a href="{% url 'horario_actualizar' horario.id  %}" class="btn btn-info">Editar</a></td>
                       <td><a href="{% url 'horario_eliminar' horario.id  %}" class="btn btn-danger">Eliminar</a></td>
                   </tr>
