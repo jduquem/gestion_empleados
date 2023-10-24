@@ -11,13 +11,14 @@
             <div class="card-body">
                 <form action="{% url 'empleado_eliminar' employee.employee_id %}" method="POST">{% csrf_token %}
                     <div class="form-group">
-                        <input type="text" id="employee_id" name="employee_id" value="{{employee.employee_id}}" class="form-control" hidden required>
+                        <input type="text" id="employee_id" name="employee_id" value="{{employee.employee_id}}"
+                            class="form-control" hidden required>
                     </div>
                     <div class="alert alert-danger" role="alert">
                         Esta seguro que desea eliminar el empleado {{employee.name }} - {{employee.identification }}
-                      </div>
+                    </div>
                     <div class="form-group">
-                        <button type="submit" type="button" class="btn btn-danger" >Aceptar</button>
+                        <button type="submit" type="button" class="btn btn-danger">Aceptar</button>
                         <a href="{% url 'listar_empleados' %}" class="btn btn-secondary">Cancelar</a>
                     </div>
                 </form>

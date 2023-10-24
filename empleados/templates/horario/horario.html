@@ -24,7 +24,7 @@
                 </thead>
                 <tbody>
                     {% for horario in horarios %}
-                        <tr>
+                    <tr>
                         <td>{{ horario.employee.name }}</td>
                         <td>{{ horario.date_reg|date:'d/m/Y' }}</td>
                         <td>{{ horario.entry_time }}</td>
@@ -33,10 +33,12 @@
                         <td>{{ horario.total_hours|floatformat:'2' }}</td>
                         <td>${{ horario.valor_hours|floatformat:2 }}</td>
                         <td>
-                        <a href="{% url 'horario_actualizar' horario.id %}" class="btn btn-info"><i class="bi bi-pencil"></i></a>
-                        <a href="{% url 'horario_eliminar' horario.id %}" class="btn btn-danger"><i class="bi bi-calendar-x"></i></a>
+                            <a href="{% url 'horario_actualizar' horario.id %}" class="btn btn-info"><i
+                                    class="bi bi-pencil"></i></a>
+                            <a href="{% url 'horario_eliminar' horario.id %}" class="btn btn-danger"><i
+                                    class="bi bi-calendar-x"></i></a>
                         </td>
-                        </tr>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>

@@ -25,7 +25,8 @@
                 <tbody>
                     {% for empleado in empleados %}
                     <tr>
-                        <td>{% if empleado.user.groups.all.0.name == 'Administradores' %} Administrador {% else %} Empleado {% endif %}</td>
+                        <td>{% if empleado.user.groups.all.0.name == 'Administradores' %} Administrador {% else %}
+                            Empleado {% endif %}</td>
                         <td>{{ empleado.identification }}</td>
                         <td>{{ empleado.name }}</td>
                         <td>{{ empleado.gender }}</td>
@@ -34,8 +35,10 @@
                         <td>${{ empleado.salary }}</td>
                         <td>{{ empleado.city }}</td>
                         <td>
-                            <a href="{% url 'empleado_actualizar' empleado.employee_id %}" class="btn btn-info"><i class="bi bi-pencil"></i></a>
-                            <a href="{% url 'empleado_eliminar' empleado.employee_id %}" class="btn btn-danger"><i class="bi bi-archive"></i></a>
+                            <a href="{% url 'empleado_actualizar' empleado.employee_id %}" class="btn btn-info"><i
+                                    class="bi bi-pencil"></i></a>
+                            <a href="{% url 'empleado_eliminar' empleado.employee_id %}" class="btn btn-danger"><i
+                                    class="bi bi-archive"></i></a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -43,7 +46,7 @@
             </table>
         </div>
         {%endif%}
-        <a href="{% url 'empleado_agregar' %}" class="btn btn-info">Crear</a> 
+        <a href="{% url 'empleado_agregar' %}" class="btn btn-info">Crear</a>
     </div>
 </div>
 {% endblock %}

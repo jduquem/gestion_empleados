@@ -35,14 +35,14 @@
                       <td>{{ horario.employee.gender }}</td>
                       <td>{{ horario.employee.email }}</td>
                       <td>{{ horario.employee.numberphone }}</td>
-                      <td>$ {{ horario.employee.salary|floatformat:2}}</td>
+                      <td>${{ horario.employee.salary|floatformat:2}}</td>
                       <td>{{ horario.employee.city }}</td>
                       <td>{{ horario.date_reg|date:'d/m/Y' }}</td>
                       <td>{{ horario.entry_time }}</td>
                       <td>{{ horario.departure_time }}</td>
                       <td>{%if horario.holiday == False %} No {%elif horario.holiday == True %} Si {%endif%}</td>
                       <td>{{ horario.total_hours|floatformat:2}}</td>
-                      <td>$ {{ horario.valor_hours|floatformat:2 }}</td>
+                      <td>${{ horario.valor_hours|floatformat:2 }}</td>
                   </tr>
                   {% endfor %}
               </tbody>

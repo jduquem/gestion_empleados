@@ -11,13 +11,16 @@
             <div class="card-body">
                 <form action="{% url 'horario_eliminar' horarios.id %}" method="POST">{% csrf_token %}
                     <div class="form-group">
-                        <input type="text" id="id" name="id" value="{{horarios.id}}" class="form-control" hidden required>
+                        <input type="text" id="id" name="id" value="{{horarios.id}}" class="form-control" hidden
+                            required>
                     </div>
                     <div class="alert alert-danger" role="alert">
-                        Esta seguro que desea eliminar el horario para el empleado {{ horarios.employee.name }} - {{ horarios.employee.identification }} horario  {{ horarios.entry_time }} - {{ horarios.departure_time }}
-                      </div>
+                        Esta seguro que desea eliminar el horario para el empleado {{ horarios.employee.name }} -
+                        {{ horarios.employee.identification }} horario {{ horarios.entry_time }} -
+                        {{ horarios.departure_time }}
+                    </div>
                     <div class="form-group">
-                        <button type="submit" type="button" class="btn btn-danger" >Aceptar</button>
+                        <button type="submit" type="button" class="btn btn-danger">Aceptar</button>
                         <a href="{% url 'listar_horarios' %}" class="btn btn-secondary">Cancelar</a>
                     </div>
                 </form>
