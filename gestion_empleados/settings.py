@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'empleados'
+    'empleados',
+    'shift'
 ]
 
 MIDDLEWARE = [
@@ -90,7 +91,7 @@ DATABASES = {
         'USER': 'ccteirbf',
         'PASSWORD': '6Ot1hGYGaML_hG09DtWtc64k217Zql_X',
         'HOST': 'suleiman.db.elephantsql.com',
-        'DATABASES_PORT': '5432'
+        'PORT': '5432'
 
 
     }

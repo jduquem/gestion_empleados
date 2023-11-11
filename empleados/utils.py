@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime, timedelta
-from .models import Employee, EmployeeShift
+from .models import Employee
+from shift.models import EmployeeShift
 import random
 from django.db.models import Q
 

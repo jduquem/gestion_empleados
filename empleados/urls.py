@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views_employee as employee 
-from . import views_shift as shift
+from shift.views import ShiftList, ShiftAdd, ShiftUpdate, ShiftDelete
 from . import views_chart as chart
 from .views import Index, NomineeSalaryAverage, NomineeSalaryDetails, Chart
 
@@ -16,10 +16,10 @@ urlpatterns = [
 
    
        # horarios
-    path('listar_horarios/', shift.ShiftList.as_view(), name='listar_horarios'),
-    path('horario_agregar/', shift.ShiftAdd.as_view(), name='horario_agregar'),
-    path('horario_actualizar/<int:id>', shift.ShiftUpdate.as_view(), name='horario_actualizar'),
-    path('horario_eliminar/<int:id>', shift.ShiftDelete.as_view(), name='horario_eliminar'),
+    path('listar_horarios/', ShiftList.as_view(), name='listar_horarios'),
+    path('horario_agregar/', ShiftAdd.as_view(), name='horario_agregar'),
+    path('horario_actualizar/<int:id>', ShiftUpdate.as_view(), name='horario_actualizar'),
+    path('horario_eliminar/<int:id>', ShiftDelete.as_view(), name='horario_eliminar'),
 
 
       # reporte

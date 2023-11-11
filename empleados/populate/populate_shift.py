@@ -1,5 +1,6 @@
 from faker import Faker
-from empleados.models import EmployeeShift, Employee
+from empleados.models import Employee
+from shift.models import EmployeeShift
 from django.contrib.auth.models import User, Group
 import random
 from datetime import datetime, timedelta

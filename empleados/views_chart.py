@@ -1,4 +1,5 @@
-from .models import Employee, EmployeeShift
+from .models import Employee
+from shift.models import EmployeeShift
 from django.shortcuts import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse

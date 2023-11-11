@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Employee, EmployeeShift
+from .models import Employee
 # Register your models here.
 admin.site.register(Employee)
-admin.site.register(EmployeeShift)
+# admin.site.register(EmployeeShift)
